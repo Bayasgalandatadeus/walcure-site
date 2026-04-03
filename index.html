@@ -5,22 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walcure | Career IQ Assessment</title>
-    <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-        }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
     </style>
 </head>
 
@@ -29,10 +20,9 @@
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 glass border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20">
-                    W</div>
+            <!-- CLICKABLE LOGO TO START SCREEN -->
+            <div onclick="goToHome()" class="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-all active:scale-95">
+                <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20">W</div>
                 <span class="text-2xl font-bold tracking-tighter text-slate-900">WALCURE</span>
             </div>
             <div class="hidden md:flex space-x-8 font-medium text-slate-500">
@@ -47,94 +37,63 @@
 
         <!-- START SCREEN -->
         <div id="intro-screen" class="text-center">
-            <div
-                class="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-emerald-700 uppercase bg-emerald-100 rounded-full">
-                New Assessment v2.0</div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-tight">Unlock your <span
-                    class="text-emerald-600">Professional Potential.</span></h1>
-            <p class="text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">Our standardized IQ assessment
-                matches your logic patterns with high-growth career paths in the tech and business world.</p>
-            <button onclick="startQuiz()"
-                class="group relative inline-flex items-center justify-center px-10 py-5 font-bold text-white transition-all duration-200 bg-slate-900 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 hover:bg-black">
+            <div class="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-emerald-700 uppercase bg-emerald-100 rounded-full">New Assessment v2.0</div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-tight">Unlock your <span class="text-emerald-600">Professional Potential.</span></h1>
+            <p class="text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">Our standardized IQ assessment matches your logic patterns with high-growth career paths.</p>
+            <button onclick="startQuiz()" class="group relative inline-flex items-center justify-center px-10 py-5 font-bold text-white transition-all duration-200 bg-slate-900 rounded-full hover:bg-black">
                 Start IQ Assessment
-                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6">
-                    </path>
-                </svg>
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
             </button>
         </div>
 
         <!-- QUIZ SCREEN -->
-        <div id="quiz-screen"
-            class="hidden bg-white p-8 md:p-16 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100">
+        <div id="quiz-screen" class="hidden bg-white p-8 md:p-16 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100">
             <div class="flex justify-between items-center mb-10">
-                <span id="question-number" class="text-emerald-600 font-bold tracking-widest uppercase text-xs">Question
-                    1/5</span>
-                <div class="w-48 bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-700" style="width: 20%">
+                <!-- BACK BUTTON -->
+                <button id="back-btn" onclick="goBack()" class="text-slate-400 hover:text-emerald-600 flex items-center gap-1 font-semibold transition-colors invisible">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Back
+                </button>
+                <div class="flex flex-col items-end">
+                    <span id="question-number" class="text-emerald-600 font-bold tracking-widest uppercase text-xs">Question 1/5</span>
+                    <div class="w-48 bg-slate-100 h-2 rounded-full overflow-hidden mt-2">
+                        <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-700" style="width: 20%"></div>
                     </div>
                 </div>
             </div>
 
-            <h2 id="question-text" class="text-3xl md:text-4xl font-bold mb-10 text-slate-800 leading-tight">Loading
-                Assessment...</h2>
-
-            <div id="options-grid" class="grid gap-4">
-                <!-- Buttons Injected by JS -->
-            </div>
+            <h2 id="question-text" class="text-3xl md:text-4xl font-bold mb-10 text-slate-800 leading-tight">Loading Assessment...</h2>
+            <div id="options-grid" class="grid gap-4"></div>
         </div>
 
         <!-- LEAD FORM SCREEN -->
-        <div id="lead-screen"
-            class="hidden max-w-md mx-auto bg-white p-12 rounded-[40px] shadow-2xl border border-slate-100 text-center">
-            <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
+        <div id="lead-screen" class="hidden max-w-md mx-auto bg-white p-12 rounded-[40px] shadow-2xl border border-slate-100 text-center">
             <h2 class="text-3xl font-bold mb-4">Assessment Ready.</h2>
-            <p class="text-slate-500 mb-10">Enter your details to receive your official IQ report and career roadmap via
-                email.</p>
+            <p class="text-slate-500 mb-10">Enter your details to receive your report via email.</p>
             <form id="leadForm" class="space-y-4">
-                <input type="text" id="userName" placeholder="Your Full Name" required
-                    class="w-full p-5 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all">
-                <input type="email" id="userEmail" placeholder="Work Email Address" required
-                    class="w-full p-5 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all">
-                <button type="submit" id="submitBtn"
-                    class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-emerald-700 shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98]">Send
-                    My Results</button>
+                <input type="text" id="userName" placeholder="Your Full Name" required class="w-full p-5 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all">
+                <input type="email" id="userEmail" placeholder="Work Email Address" required class="w-full p-5 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all">
+                <button type="submit" id="submitBtn" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-emerald-700 shadow-xl transition-all active:scale-[0.98]">Send My Results</button>
             </form>
         </div>
 
         <!-- SUCCESS SCREEN -->
         <div id="result-screen" class="hidden text-center py-20">
-            <h2 class="text-5xl font-bold mb-4 italic text-emerald-600">Your IQ Score: <span id="display-score">0</span>
-            </h2>
+            <h2 class="text-5xl font-bold mb-4 italic text-emerald-600">Your IQ Score: <span id="display-score">0</span></h2>
             <p class="text-2xl font-semibold text-slate-800 mb-4">Target Career Path:</p>
-            <div id="display-path"
-                class="inline-block bg-slate-900 text-white px-8 py-3 rounded-full text-xl font-bold mb-10 tracking-wide">
-                Analyst</div>
-            <p class="text-lg text-slate-500 max-w-lg mx-auto">Check your inbox. A detailed report with the Walcure logo
-                has been sent to you.</p>
-            <button onclick="location.reload()"
-                class="mt-12 text-slate-400 hover:text-emerald-600 font-bold transition">Retake Assessment</button>
+            <div id="display-path" class="inline-block bg-slate-900 text-white px-8 py-3 rounded-full text-xl font-bold mb-10 tracking-wide">Analyst</div>
+            <p class="text-lg text-slate-500">A detailed report has been sent to your email.</p>
+            <button onclick="goToHome()" class="mt-12 text-slate-400 hover:text-emerald-600 font-bold transition underline">Take Another Test</button>
         </div>
 
     </main>
 
     <script>
-        // 1. CONFIGURATION
         const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
-
-        // FIX: Renamed variable to supabaseClient to avoid conflict
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
         emailjs.init("tuzgf0BVh8DMcd0l1");
 
-        // 2. QUIZ DATA
         const questions = [
             { q: "Which number follows in the sequence: 2, 4, 8, 16...?", options: ["24", "32", "64", "48"], correct: 1 },
             { q: "If all A are B, and all B are C, are all A necessarily C?", options: ["Yes", "No", "Only on Sundays", "Not enough info"], correct: 0 },
@@ -144,14 +103,32 @@
         ];
 
         let currentIdx = 0;
+        let userAnswers = []; // Stores user selections for "Back" functionality
         let score = 80;
         let path = "Business Generalist";
 
-        // 3. UI FUNCTIONS
+        // RESET FUNCTION (HOME)
+        function goToHome() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('lead-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('intro-screen').classList.remove('hidden');
+            currentIdx = 0;
+            userAnswers = [];
+        }
+
         function startQuiz() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
             renderQuestion();
+        }
+
+        // GO BACK FUNCTION
+        function goBack() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+            }
         }
 
         function renderQuestion() {
@@ -160,11 +137,22 @@
             document.getElementById('question-text').innerText = q.q;
             document.getElementById('progress-bar').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
 
+            // Show/Hide back button
+            const backBtn = document.getElementById('back-btn');
+            if (currentIdx === 0) backBtn.classList.add('invisible');
+            else backBtn.classList.remove('invisible');
+
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             q.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = "group flex items-center justify-between p-6 text-left border-2 border-slate-100 rounded-3xl hover:border-emerald-500 hover:bg-emerald-50 transition-all font-bold text-slate-700 w-full";
+                
+                // Highlight previous selection if they clicked back
+                if(userAnswers[currentIdx] === index) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50');
+                }
+
                 btn.innerHTML = `<span>${opt}</span><div class="w-6 h-6 rounded-full border-2 border-slate-200 group-hover:border-emerald-500 transition-all"></div>`;
                 btn.onclick = () => handleChoice(index);
                 grid.appendChild(btn);
@@ -172,50 +160,48 @@
         }
 
         function handleChoice(index) {
-            const q = questions[currentIdx];
-            if (q.correct !== null && index === q.correct) score += 12;
-
-            if (currentIdx === 4) {
-                if (index === 0) path = "Creative Director";
-                if (index === 1) path = "Data Scientist";
-                if (index === 2) path = "Operations CEO";
-                if (index === 3) path = "PR Strategist";
-            }
-
+            userAnswers[currentIdx] = index;
             currentIdx++;
             if (currentIdx < questions.length) {
                 renderQuestion();
             } else {
+                calculateResults();
                 document.getElementById('quiz-screen').classList.add('hidden');
                 document.getElementById('lead-screen').classList.remove('hidden');
             }
         }
 
-        // 4. FINAL SUBMISSION
+        // CALCULATE SCORE BASED ON ANSWERS ARRAY
+        function calculateResults() {
+            score = 80; // Reset to base
+            userAnswers.forEach((ans, i) => {
+                const q = questions[i];
+                if (q.correct !== null && ans === q.correct) score += 12;
+                if (i === 4) {
+                    if (ans === 0) path = "Creative Director";
+                    if (ans === 1) path = "Data Scientist";
+                    if (ans === 2) path = "Operations CEO";
+                    if (ans === 3) path = "PR Strategist";
+                }
+            });
+        }
+
         document.getElementById('leadForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "Encrypting Report...";
+            btn.innerText = "Processing...";
             btn.disabled = true;
 
             const name = document.getElementById('userName').value;
             const email = document.getElementById('userEmail').value;
 
-            // FIX: Use the renamed supabaseClient here
             const { error: dbError } = await supabaseClient
                 .from('career_tests')
                 .insert([{ name, email, iq_score: score, career_path: path }]);
 
-            if (dbError) {
-                console.error("Supabase Error:", dbError);
-            }
-
             try {
                 await emailjs.send("service_qq96gby", "template_f3jm56x", {
-                    name: name,
-                    email: email,
-                    iq_score: score,
-                    career_path: path
+                    name: name, email: email, iq_score: score, career_path: path
                 });
 
                 document.getElementById('lead-screen').classList.add('hidden');
@@ -223,7 +209,7 @@
                 document.getElementById('display-score').innerText = score;
                 document.getElementById('display-path').innerText = path;
             } catch (err) {
-                alert("Submission error. Please try again.");
+                alert("Submission error.");
                 btn.disabled = false;
                 btn.innerText = "Send My Results";
             }
