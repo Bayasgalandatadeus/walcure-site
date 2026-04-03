@@ -1,40 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walcure | Innovative Solutions</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
+<section class="order-form container">
+    <h2>Place Your Order</h2>
+    <form id="orderForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email Address" required>
+        <textarea id="address" placeholder="Delivery Address" required></textarea>
+        <input type="text" id="orderItems" placeholder="What are you ordering?" required>
+        <input type="number" id="price" placeholder="Total Price" required>
+        <button type="submit" class="btn">Confirm Order</button>
+    </form>
+</section>
 
-    <nav>
-        <div class="container">
-            <div class="logo">WALCURE</div>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<style>
+    /* Add this to your style.css */
+    .order-form { padding: 50px 0; max-width: 500px; }
+    form input, form textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
+    form button { cursor: pointer; width: 100%; border: none; }
+</style>
 
-    <header class="hero">
-        <div class="container">
-            <h1>Building the Future of <span class="highlight">Walcure</span></h1>
-            <p>A professional platform for innovative digital solutions.</p>
-            <a href="#" class="btn">Get Started</a>
-        </div>
-    </header>
+<!-- Supabase Script -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Replace these with your keys from Project Settings > API
+  const SUPABASE_URL = 'https://YOUR_URL.supabase.co';
+  const SUPABASE_KEY = 'YOUR_ANON_KEY';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    <section class="content">
-        <div class="container">
-            <h2>Under Construction</h2>
-            <p>We are currently developing something amazing. Stay tuned for updates.</p>
-        </div>
-    </section>
+  const form = document.getElementById('orderForm');
 
-</body>
-</html>
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get values from form
+    const customer_name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+    const items = document.getElementById('orderItems').value;
+    const total_price = document.getElementById('price').value;
+
+    // Send to Supabase
+    const { data, error } = await supabaseClient
+      .from('orders')
+      .insert([{ customer_name, email, address, items, total_price }]);
+
+    if (error) {
+      alert('Error: ' + error.message);
+    } else {
+      alert('Success! Your order has been placed.');
+      form.reset();
+    }
+  });
+</script>
