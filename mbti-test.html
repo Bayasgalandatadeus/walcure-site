@@ -968,7 +968,7 @@
       const email = document.getElementById('userEmail').value;
       const p = mbtiProfiles[mbtiResult] || {};
       try {
-        await sb.from('career_tests').insert([{ name, email, iq_score: null, career_path: p.name || mbtiResult, test_type: 'mbti' }]);
+        await sb.from('career_tests').insert([{ name, email, iq_score: null, career_path: p.name || mbtiResult, test_type: 'mbti', mbti_code: mbtiResult }]);
       } catch (err) { }
       try {
         await emailjs.send("service_qq96gby", "template_f3jm56x", { name, email, iq_score: mbtiResult, career_path: p.name || '' });
