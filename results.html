@@ -1,347 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walcure | My Results</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root {
-  --bg:#0a0a0f;--surface:#13131e;--surface2:#1c1c2e;--border:rgba(255,255,255,0.07);
-  --accent:#63f5bc;--accent2:#a78bfa;--accent3:#f59e63;--accent4:#f563a0;
-  --text:#eeeef5;--muted:#6b6b85;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(99,245,188,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(99,245,188,0.025) 1px,transparent 1px);
-  background-size:72px 72px}
-.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
-.o1{width:500px;height:500px;background:rgba(99,245,188,0.06);top:-150px;right:-100px}
-.o2{width:400px;height:400px;background:rgba(167,139,250,0.05);bottom:-100px;left:-150px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walcure | My Results</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131e;
+      --surface2: #1c1c2e;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #63f5bc;
+      --accent2: #a78bfa;
+      --accent3: #f59e63;
+      --accent4: #f563a0;
+      --text: #eeeef5;
+      --muted: #6b6b85;
+    }
 
-nav{position:sticky;top:0;z-index:100;height:72px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-mark{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#000}
-.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;color:var(--text)}
-.nav-link{color:var(--muted);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
-.nav-link:hover{color:var(--accent)}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* MAIN */
-.main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:80px 24px}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden
+    }
 
-/* HEADER */
-.page-header{text-align:center;margin-bottom:56px}
-.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;background:rgba(99,245,188,0.08);border:1px solid rgba(99,245,188,0.2);border-radius:100px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:32px}
-.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.page-header h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-.03em;margin-bottom:16px;line-height:1.05}
-.page-header p{font-size:16px;color:var(--muted);line-height:1.7}
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: linear-gradient(rgba(99, 245, 188, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 245, 188, 0.025) 1px, transparent 1px);
+      background-size: 72px 72px
+    }
 
-/* SEARCH BOX */
-.search-box{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px;margin-bottom:40px}
-.search-box label{display:block;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.04em;margin-bottom:12px}
-.input-row{display:flex;gap:12px}
-.email-input{flex:1;padding:16px 20px;background:var(--surface2);border:1.5px solid var(--border);border-radius:14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
-.email-input::placeholder{color:var(--muted)}
-.email-input:focus{border-color:var(--accent)}
-.search-btn{padding:16px 28px;background:var(--accent);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px}
-.search-btn:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(99,245,188,0.3)}
-.search-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-@media(max-width:540px){.input-row{flex-direction:column}.nav-link.desktop{display:none}nav{padding:0 20px}}
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0
+    }
 
-/* STATES */
-.state{display:none;text-align:center;padding:56px 24px;animation:fadeUp .4s ease}
-.state.show{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .o1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(99, 245, 188, 0.06);
+      top: -150px;
+      right: -100px
+    }
 
-/* LOADING */
-.spinner{width:44px;height:44px;border-radius:50%;border:3px solid var(--surface2);border-top-color:var(--accent);animation:spin .8s linear infinite;margin:0 auto 20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.state-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
-.state-sub{font-size:14px;color:var(--muted);line-height:1.6}
+    .o2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(167, 139, 250, 0.05);
+      bottom: -100px;
+      left: -150px
+    }
 
-/* EMPTY */
-.empty-icon{font-size:48px;margin-bottom:20px}
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 72px;
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border)
+    }
 
-/* RESULTS */
-#results-list{display:flex;flex-direction:column;gap:20px;animation:fadeUp .5s ease}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none
+    }
 
-/* RESULT CARD */
-.result-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;transition:border-color .2s}
-.result-card:hover{border-color:rgba(99,245,188,0.2)}
-.result-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px}
-.test-type-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.type-iq{background:rgba(99,245,188,0.1);color:var(--accent)}
-.type-mbti{background:rgba(167,139,250,0.1);color:var(--accent2)}
-.type-career{background:rgba(245,159,99,0.1);color:var(--accent3)}
-.type-stress{background:rgba(245,99,160,0.1);color:var(--accent4)}
-.result-date{font-size:12px;color:var(--muted)}
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #000
+    }
 
-.result-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-@media(max-width:480px){.result-scores{grid-template-columns:1fr 1fr}}
-.score-item{background:var(--surface2);border-radius:14px;padding:16px}
-.score-item-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
-.score-item-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1}
-.score-item-value.accent{color:var(--accent)}
-.score-item-value.purple{color:var(--accent2)}
-.score-item-value.orange{color:var(--accent3)}
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: .08em;
+      color: var(--text)
+    }
 
-/* IQ METER */
-.iq-meter{margin-bottom:20px}
-.iq-meter-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}
-.iq-bar-track{height:6px;background:var(--surface2);border-radius:100px;overflow:hidden}
-.iq-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+    .nav-link {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .2s
+    }
 
-/* PATH TAG */
-.path-tag{display:inline-block;padding:10px 20px;background:linear-gradient(135deg,rgba(99,245,188,0.15),rgba(167,139,250,0.15));border:1px solid rgba(99,245,188,0.2);border-radius:100px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--accent)}
+    .nav-link:hover {
+      color: var(--accent)
+    }
 
-/* RETAKE BTN */
-.retake-btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:12px 22px;border:1.5px solid var(--border);color:var(--muted);border-radius:12px;font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
-.retake-btn:hover{border-color:var(--accent);color:var(--accent)}
+    /* MAIN */
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 80px 24px
+    }
 
-/* TAKE MORE */
-.take-more{margin-top:48px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;text-align:center}
-.take-more h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px}
-.take-more p{font-size:14px;color:var(--muted);margin-bottom:24px}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;border-radius:12px;text-decoration:none;transition:all .2s}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(99,245,188,0.3)}
+    /* HEADER */
+    .page-header {
+      text-align: center;
+      margin-bottom: 56px
+    }
 
-/* TIER BADGE */
-.tier-badge{display:inline-block;padding:4px 10px;background:rgba(99,245,188,0.1);border-radius:6px;font-size:11px;font-weight:600;color:var(--accent);margin-left:8px;vertical-align:middle}
-</style>
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(99, 245, 188, 0.08);
+      border: 1px solid rgba(99, 245, 188, 0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 16px;
+      line-height: 1.05
+    }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    /* SEARCH BOX */
+    .search-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px
+    }
+
+    .search-box label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 12px
+    }
+
+    .input-row {
+      display: flex;
+      gap: 12px
+    }
+
+    .email-input {
+      flex: 1;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .email-input::placeholder {
+      color: var(--muted)
+    }
+
+    .email-input:focus {
+      border-color: var(--accent)
+    }
+
+    .search-btn {
+      padding: 16px 28px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .search-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px rgba(99, 245, 188, 0.3)
+    }
+
+    .search-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    @media(max-width:540px) {
+      .input-row {
+        flex-direction: column
+      }
+
+      .nav-link.desktop {
+        display: none
+      }
+
+      nav {
+        padding: 0 20px
+      }
+    }
+
+    /* STATES */
+    .state {
+      display: none;
+      text-align: center;
+      padding: 56px 24px;
+      animation: fadeUp .4s ease
+    }
+
+    .state.show {
+      display: block
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* LOADING */
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 3px solid var(--surface2);
+      border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+      margin: 0 auto 20px
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .state-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px
+    }
+
+    .state-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6
+    }
+
+    /* EMPTY */
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 20px
+    }
+
+    /* RESULTS */
+    #results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeUp .5s ease
+    }
+
+    /* RESULT CARD */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: border-color .2s
+    }
+
+    .result-card:hover {
+      border-color: rgba(99, 245, 188, 0.2)
+    }
+
+    .result-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px
+    }
+
+    .test-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase
+    }
+
+    .type-iq {
+      background: rgba(99, 245, 188, 0.1);
+      color: var(--accent)
+    }
+
+    .type-mbti {
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--accent2)
+    }
+
+    .type-career {
+      background: rgba(245, 159, 99, 0.1);
+      color: var(--accent3)
+    }
+
+    .type-stress {
+      background: rgba(245, 99, 160, 0.1);
+      color: var(--accent4)
+    }
+
+    .result-date {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .result-scores {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px
+    }
+
+    @media(max-width:480px) {
+      .result-scores {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    .score-item {
+      background: var(--surface2);
+      border-radius: 14px;
+      padding: 16px
+    }
+
+    .score-item-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 8px
+    }
+
+    .score-item-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1
+    }
+
+    .score-item-value.accent {
+      color: var(--accent)
+    }
+
+    .score-item-value.purple {
+      color: var(--accent2)
+    }
+
+    .score-item-value.orange {
+      color: var(--accent3)
+    }
+
+    /* IQ METER */
+    .iq-meter {
+      margin-bottom: 20px
+    }
+
+    .iq-meter-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px
+    }
+
+    .iq-bar-track {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 100px;
+      overflow: hidden
+    }
+
+    .iq-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 100px;
+      transition: width 1s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    /* PATH TAG */
+    .path-tag {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, rgba(99, 245, 188, 0.15), rgba(167, 139, 250, 0.15));
+      border: 1px solid rgba(99, 245, 188, 0.2);
+      border-radius: 100px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--accent)
+    }
+
+    /* RETAKE BTN */
+    .retake-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px 22px;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all .2s
+    }
+
+    .retake-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    /* TAKE MORE */
+    .take-more {
+      margin-top: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      text-align: center
+    }
+
+    .take-more h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px
+    }
+
+    .take-more p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all .2s
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(99, 245, 188, 0.3)
+    }
+
+    /* TIER BADGE */
+    .tier-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(99, 245, 188, 0.1);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-left: 8px;
+      vertical-align: middle
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="bg-grid"></div>
-<div class="orb o1"></div>
-<div class="orb o2"></div>
+  <div class="bg-grid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
 
-<nav>
-  <a class="logo" href="index.html">
-    <div class="logo-mark">W</div>
-    <span class="logo-text">WALCURE</span>
-  </a>
-  <div style="display:flex;align-items:center;gap:24px">
-    <a class="nav-link desktop" href="index.html">← All Tests</a>
-    <a class="nav-link" href="index.html">Home</a>
-  </div>
-</nav>
-
-<main class="main">
-  <div class="page-header">
-    <div class="badge"><div class="badge-dot"></div>Results Lookup</div>
-    <h1>Your Test Results</h1>
-    <p>Enter the email you used during any assessment to retrieve your full results, scores, and career analysis.</p>
-  </div>
-
-  <div class="search-box">
-    <label>Email address used during assessment</label>
-    <div class="input-row">
-      <input class="email-input" type="email" id="emailInput" placeholder="you@example.com" autocomplete="email">
-      <button class="search-btn" id="searchBtn" onclick="lookupResults()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-        Search
-      </button>
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-mark">W</div>
+      <span class="logo-text">WALCURE</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:24px">
+      <a class="nav-link desktop" href="index.html">← All Tests</a>
+      <a class="nav-link" href="index.html">Home</a>
     </div>
-  </div>
+  </nav>
 
-  <!-- LOADING -->
-  <div class="state" id="state-loading">
-    <div class="spinner"></div>
-    <div class="state-title">Searching your results...</div>
-    <div class="state-sub">Looking up assessments linked to your email.</div>
-  </div>
-
-  <!-- EMPTY -->
-  <div class="state" id="state-empty">
-    <div class="empty-icon">🔍</div>
-    <div class="state-title">No results found</div>
-    <div class="state-sub" id="empty-message">No assessments found for this email address.<br>Make sure you entered the exact email used during the test.</div>
-    <a class="btn-primary" href="index.html" style="margin-top:28px;display:inline-flex">Take an Assessment →</a>
-  </div>
-
-  <!-- ERROR -->
-  <div class="state" id="state-error">
-    <div class="empty-icon">⚠️</div>
-    <div class="state-title">Something went wrong</div>
-    <div class="state-sub">Could not connect to the database. Please try again.</div>
-  </div>
-
-  <!-- RESULTS -->
-  <div id="results-area" style="display:none">
-    <div id="results-list"></div>
-    <div class="take-more">
-      <h3>Want to explore more?</h3>
-      <p>Try one of our other assessments — each reveals a different dimension of your professional profile.</p>
-      <a class="btn-primary" href="index.html">View All Assessments →</a>
+  <main class="main">
+    <div class="page-header">
+      <div class="badge">
+        <div class="badge-dot"></div>Results Lookup
+      </div>
+      <h1>Your Test Results</h1>
+      <p>Enter the email you used during any assessment to retrieve your full results, scores, and career analysis.</p>
     </div>
-  </div>
-</main>
 
-<script>
-const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <div class="search-box">
+      <label>Email address used during assessment</label>
+      <div class="input-row">
+        <input class="email-input" type="email" id="emailInput" placeholder="you@example.com" autocomplete="email">
+        <button class="search-btn" id="searchBtn" onclick="lookupResults()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Search
+        </button>
+      </div>
+    </div>
 
-function showState(id) {
-  ['state-loading','state-empty','state-error'].forEach(s => {
-    document.getElementById(s).classList.remove('show');
-  });
-  document.getElementById('results-area').style.display = 'none';
-  if (id) document.getElementById(id).classList.add('show');
-}
+    <!-- LOADING -->
+    <div class="state" id="state-loading">
+      <div class="spinner"></div>
+      <div class="state-title">Searching your results...</div>
+      <div class="state-sub">Looking up assessments linked to your email.</div>
+    </div>
 
-function getIQTier(score) {
-  if (score >= 130) return 'Gifted';
-  if (score >= 120) return 'Superior';
-  if (score >= 110) return 'High Average';
-  if (score >= 100) return 'Average';
-  return 'Developing';
-}
+    <!-- EMPTY -->
+    <div class="state" id="state-empty">
+      <div class="empty-icon">🔍</div>
+      <div class="state-title">No results found</div>
+      <div class="state-sub" id="empty-message">No assessments found for this email address.<br>Make sure you entered
+        the exact email used during the test.</div>
+      <a class="btn-primary" href="index.html" style="margin-top:28px;display:inline-flex">Take an Assessment →</a>
+    </div>
 
-function getIQPercent(score) {
-  return Math.min(100, Math.max(5, ((score - 70) / 78) * 100));
-}
+    <!-- ERROR -->
+    <div class="state" id="state-error">
+      <div class="empty-icon">⚠️</div>
+      <div class="state-title">Something went wrong</div>
+      <div class="state-sub">Could not connect to the database. Please try again.</div>
+    </div>
 
-function formatDate(ts) {
-  if (!ts) return 'Unknown date';
-  const d = new Date(ts);
-  return d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
-}
+    <!-- RESULTS -->
+    <div id="results-area" style="display:none">
+      <div id="results-list"></div>
+      <div class="take-more">
+        <h3>Want to explore more?</h3>
+        <p>Try one of our other assessments — each reveals a different dimension of your professional profile.</p>
+        <a class="btn-primary" href="index.html">View All Assessments →</a>
+      </div>
+    </div>
+  </main>
 
-function renderResults(rows) {
-  const list = document.getElementById('results-list');
-  list.innerHTML = '';
+  <script>
+    const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  rows.forEach(row => {
-    const testType = row.test_type || 'iq';
-    const card = document.createElement('div');
-    card.className = 'result-card';
+    function showState(id) {
+      ['state-loading', 'state-empty', 'state-error'].forEach(s => {
+        document.getElementById(s).classList.remove('show');
+      });
+      document.getElementById('results-area').style.display = 'none';
+      if (id) document.getElementById(id).classList.add('show');
+    }
 
-    // Determine badge type
-    const typeMap = {
-      iq: { label: '🧠 IQ Assessment', cls: 'type-iq' },
-      mbti: { label: '🔮 MBTI Personality', cls: 'type-mbti' },
-      career: { label: '🎯 Career Discovery', cls: 'type-career' },
-      stress: { label: '💆 Stress Check', cls: 'type-stress' }
-    };
-    const t = typeMap[testType] || typeMap.iq;
-    const tier = getIQTier(row.iq_score);
-    const pct = getIQPercent(row.iq_score);
+    function getIQTier(score) {
+      if (score >= 130) return 'Gifted';
+      if (score >= 120) return 'Superior';
+      if (score >= 110) return 'High Average';
+      if (score >= 100) return 'Average';
+      return 'Developing';
+    }
 
-    card.innerHTML = `
+    function getIQPercent(score) {
+      return Math.min(100, Math.max(5, ((score - 70) / 78) * 100));
+    }
+
+    function formatDate(ts) {
+      if (!ts) return 'Unknown date';
+      const d = new Date(ts);
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function renderResults(rows) {
+      const list = document.getElementById('results-list');
+      list.innerHTML = '';
+
+      rows.forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        const type = row.test_type || 'iq';
+
+        // 1. SET THE VARIABLES BASED ON TEST TYPE
+        let label1 = "IQ Score", val1 = row.iq_score || "—";
+        let label2 = "Percentile", val2 = Math.round(getIQPercent(row.iq_score)) + "%";
+        let badgeLabel = "🧠 IQ Assessment", badgeClass = "type-iq";
+        let pathLabel = "Recommended Career Path";
+
+        if (type === 'mbti') {
+          label1 = "Type Code", val1 = row.mbti_code || "—";
+          label2 = "Profile", val2 = "16Personalities";
+          badgeLabel = "🔮 MBTI Personality", badgeClass = "type-mbti";
+          pathLabel = "Personality Role";
+        }
+
+        if (type === 'stress') {
+          label1 = "Stress Level", val1 = row.iq_score + "%";
+          label2 = "Status", val2 = row.iq_score > 26 ? "High" : "Stable";
+          badgeLabel = "💆 Stress Check", badgeClass = "type-stress";
+          pathLabel = "Current Wellness State";
+        }
+
+        // 2. GENERATE THE HTML
+        card.innerHTML = `
       <div class="result-card-header">
         <div>
-          <span class="test-type-badge ${t.cls}">${t.label}</span>
-          <div style="margin-top:10px;font-size:16px;font-weight:600;color:var(--text)">
-            ${row.name || 'Anonymous'}
-            <span class="tier-badge">${tier}</span>
-          </div>
+          <span class="test-type-badge ${badgeClass}">${badgeLabel}</span>
+          <div style="margin-top:10px;font-size:16px;font-weight:600;color:var(--text)">${row.name}</div>
         </div>
         <div class="result-date">${formatDate(row.created_at)}</div>
       </div>
 
       <div class="result-scores">
         <div class="score-item">
-          <div class="score-item-label">IQ Score</div>
-          <div class="score-item-value accent">${row.iq_score || '—'}</div>
+          <div class="score-item-label">${label1}</div>
+          <div class="score-item-value accent">${val1}</div>
         </div>
         <div class="score-item">
-          <div class="score-item-label">Percentile</div>
-          <div class="score-item-value purple">${row.iq_score ? Math.round(pct) + '%' : '—'}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-item-label">Category</div>
-          <div class="score-item-value orange" style="font-size:16px">${tier}</div>
+          <div class="score-item-label">${label2}</div>
+          <div class="score-item-value purple" style="font-size:16px">${val2}</div>
         </div>
       </div>
 
-      ${row.iq_score ? `
-      <div class="iq-meter">
-        <div class="iq-meter-label">
+      <!-- SHOW IQ BAR ONLY FOR IQ TESTS -->
+      ${type === 'iq' ? `
+      <div class="iq-meter" style="margin-bottom:20px">
+        <div class="iq-meter-label" style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:8px">
           <span>Score Range</span>
           <span>${row.iq_score} / 148</span>
         </div>
-        <div class="iq-bar-track">
-          <div class="iq-bar-fill" style="width:0%" data-target="${pct}%"></div>
+        <div class="iq-bar-track" style="height:6px; background:var(--surface2); border-radius:100px; overflow:hidden">
+          <div class="iq-bar-fill" style="width:0%; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 1s ease" data-target="${getIQPercent(row.iq_score)}%"></div>
         </div>
       </div>
       ` : ''}
 
-      ${row.career_path ? `
       <div style="margin-bottom:16px">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Recommended Career Path</div>
-        <div class="path-tag">${row.career_path}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">${pathLabel}</div>
+        <div class="path-tag">${row.career_path || "Analysis Ready"}</div>
       </div>
-      ` : ''}
 
-      <a class="retake-btn" href="${testType}-test.html">Retake this test →</a>
+      <a class="retake-btn" href="${type}-test.html">Retake Test →</a>
     `;
+        list.appendChild(card);
+      });
 
-    list.appendChild(card);
-  });
+      // 3. THE TIMEOUT (DO NOT ERASE)
+      // This animates the bars after the HTML is added to the page
+      setTimeout(() => {
+        document.querySelectorAll('.iq-bar-fill[data-target]').forEach(bar => {
+          bar.style.width = bar.dataset.target;
+        });
+      }, 150);
 
-  // Animate bars after render
-  setTimeout(() => {
-    document.querySelectorAll('.iq-bar-fill[data-target]').forEach(bar => {
-      bar.style.width = bar.dataset.target;
-    });
-  }, 100);
-
-  document.getElementById('results-area').style.display = 'block';
-}
-
-async function lookupResults() {
-  const email = document.getElementById('emailInput').value.trim();
-  if (!email || !email.includes('@')) {
-    document.getElementById('emailInput').focus();
-    return;
-  }
-
-  const btn = document.getElementById('searchBtn');
-  btn.disabled = true;
-  showState('state-loading');
-
-  try {
-    const { data, error } = await sb
-      .from('career_tests')
-      .select('*')
-      .eq('email', email)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (!data || data.length === 0) {
-      document.getElementById('empty-message').innerHTML =
-        `No assessments found for <strong style="color:var(--text)">${email}</strong>.<br>Make sure you entered the exact email used during the test.`;
-      showState('state-empty');
-    } else {
-      showState(null);
-      renderResults(data);
+      document.getElementById('results-area').style.display = 'block';
     }
-  } catch (err) {
-    console.error(err);
-    showState('state-error');
-  } finally {
-    btn.disabled = false;
-  }
-}
 
-// Allow Enter key
-document.getElementById('emailInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') lookupResults();
-});
+    async function lookupResults() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email || !email.includes('@')) {
+        document.getElementById('emailInput').focus();
+        return;
+      }
 
-// Auto-fill from URL param: results.html?email=...
-const urlEmail = new URLSearchParams(location.search).get('email');
-if (urlEmail) {
-  document.getElementById('emailInput').value = urlEmail;
-  lookupResults();
-}
-</script>
+      const btn = document.getElementById('searchBtn');
+      btn.disabled = true;
+      showState('state-loading');
+
+      try {
+        const { data, error } = await sb
+          .from('career_tests')
+          .select('*')
+          .eq('email', email)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          document.getElementById('empty-message').innerHTML =
+            `No assessments found for <strong style="color:var(--text)">${email}</strong>.<br>Make sure you entered the exact email used during the test.`;
+          showState('state-empty');
+        } else {
+          showState(null);
+          renderResults(data);
+        }
+      } catch (err) {
+        console.error(err);
+        showState('state-error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // Allow Enter key
+    document.getElementById('emailInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') lookupResults();
+    });
+
+    // Auto-fill from URL param: results.html?email=...
+    const urlEmail = new URLSearchParams(location.search).get('email');
+    if (urlEmail) {
+      document.getElementById('emailInput').value = urlEmail;
+      lookupResults();
+    }
+  </script>
 </body>
+
 </html>
