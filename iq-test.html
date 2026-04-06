@@ -1,1121 +1,1768 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walcure | Career IQ Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<style>
-:root {
-  --bg: #0a0a0f;
-  --surface: #12121a;
-  --surface2: #1c1c28;
-  --border: rgba(255,255,255,0.06);
-  --border-active: rgba(99,245,188,0.4);
-  --accent: #63f5bc;
-  --accent2: #a78bfa;
-  --text: #f0f0f5;
-  --muted: #6b6b80;
-  --danger: #f87171;
-  --card-glow: 0 0 60px rgba(99,245,188,0.05);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walcure | Career IQ Assessment</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1c1c28;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-active: rgba(99, 245, 188, 0.4);
+      --accent: #63f5bc;
+      --accent2: #a78bfa;
+      --text: #f0f0f5;
+      --muted: #6b6b80;
+      --danger: #f87171;
+      --card-glow: 0 0 60px rgba(99, 245, 188, 0.05);
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ─── ANIMATED BG ─── */
-.bg-grid {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    linear-gradient(rgba(99,245,188,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,245,188,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-.bg-orb {
-  position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
-  animation: orbFloat 8s ease-in-out infinite;
-}
-.orb1 { width: 500px; height: 500px; background: rgba(99,245,188,0.06); top: -100px; right: -100px; animation-delay: 0s; }
-.orb2 { width: 400px; height: 400px; background: rgba(167,139,250,0.05); bottom: -50px; left: -100px; animation-delay: -4s; }
-@keyframes orbFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-30px) scale(1.05); } }
+    /* ─── ANIMATED BG ─── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(99, 245, 188, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 245, 188, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
 
-/* ─── NAV ─── */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  padding: 0 40px;
-  height: 72px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(10,10,15,0.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  display: flex; align-items: center; gap: 12px;
-  cursor: pointer; transition: opacity 0.2s;
-  font-family: 'Syne', sans-serif;
-}
-.nav-logo:hover { opacity: 0.7; }
-.logo-mark {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 18px; color: #000;
-  font-family: 'Syne', sans-serif;
-}
-.nav-brand { font-size: 18px; font-weight: 800; letter-spacing: 0.1em; color: var(--text); }
-.nav-links { display: flex; gap: 32px; }
-.nav-links a {
-  color: var(--muted); font-size: 14px; font-weight: 500;
-  text-decoration: none; transition: color 0.2s;
-  letter-spacing: 0.02em;
-}
-.nav-links a:hover { color: var(--accent); }
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
 
-/* ─── LAYOUT ─── */
-.main {
-  position: relative; z-index: 1;
-  max-width: 800px; margin: 0 auto; padding: 60px 24px 80px;
-  min-height: calc(100vh - 72px);
-  display: flex; flex-direction: column; justify-content: center;
-}
+    .orb1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(99, 245, 188, 0.06);
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
 
-/* ─── SCREENS ─── */
-.screen { display: none; animation: fadeUp 0.5s ease both; }
-.screen.active { display: block; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .orb2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(167, 139, 250, 0.05);
+      bottom: -50px;
+      left: -100px;
+      animation-delay: -4s;
+    }
 
-/* ─── INTRO SCREEN ─── */
-.badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 16px;
-  background: rgba(99,245,188,0.08);
-  border: 1px solid rgba(99,245,188,0.2);
-  border-radius: 100px;
-  font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 40px;
-}
-.badge-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    @keyframes orbFloat {
 
-.intro-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(44px, 8vw, 80px);
-  font-weight: 800;
-  line-height: 1.0;
-  letter-spacing: -0.03em;
-  margin-bottom: 28px;
-}
-.intro-title .accent { color: var(--accent); }
-.intro-title .dim { color: var(--muted); }
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
 
-.intro-sub {
-  font-size: 18px; color: var(--muted); line-height: 1.7;
-  max-width: 520px; margin-bottom: 56px; font-weight: 300;
-}
+      50% {
+        transform: translate(30px, -30px) scale(1.05);
+      }
+    }
 
-.stats-row {
-  display: flex; gap: 40px; margin-bottom: 56px;
-}
-.stat { }
-.stat-num {
-  font-family: 'Syne', sans-serif;
-  font-size: 32px; font-weight: 800; color: var(--text);
-  line-height: 1;
-}
-.stat-num span { color: var(--accent); }
-.stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    /* ─── NAV ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
 
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 12px;
-  padding: 18px 36px;
-  background: var(--accent);
-  color: #000;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700; font-size: 16px; letter-spacing: 0.02em;
-  border: none; border-radius: 14px; cursor: pointer;
-  transition: all 0.2s; position: relative; overflow: hidden;
-}
-.btn-primary::before {
-  content: ''; position: absolute; inset: 0;
-  background: rgba(255,255,255,0.2);
-  transform: translateX(-100%); transition: transform 0.3s;
-}
-.btn-primary:hover::before { transform: translateX(0); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 60px rgba(99,245,188,0.3); }
-.btn-primary:active { transform: translateY(0); }
-.btn-arrow { width: 20px; height: 20px; transition: transform 0.2s; }
-.btn-primary:hover .btn-arrow { transform: translateX(4px); }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      font-family: 'Syne', sans-serif;
+    }
 
-.info-cards {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 60px;
-}
-.info-card {
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-.info-icon { font-size: 24px; margin-bottom: 12px; }
-.info-card h4 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-.info-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .nav-logo:hover {
+      opacity: 0.7;
+    }
 
-/* ─── QUIZ SCREEN ─── */
-.quiz-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 48px;
-}
-.q-meta { display: flex; flex-direction: column; gap: 10px; }
-.q-label {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent);
-}
-.progress-track {
-  width: 200px; height: 3px; background: var(--surface2); border-radius: 100px; overflow: hidden;
-}
-.progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 100px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
-}
-.q-timer {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700;
-  color: var(--text);
-}
-.timer-ring {
-  width: 48px; height: 48px; position: relative;
-}
-.timer-svg { width: 48px; height: 48px; transform: rotate(-90deg); }
-.timer-bg { fill: none; stroke: var(--surface2); stroke-width: 3; }
-.timer-prog { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round;
-  stroke-dasharray: 126; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.5s; }
-.timer-num {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent);
-}
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #000;
+      font-family: 'Syne', sans-serif;
+    }
 
-.back-btn {
-  background: none; border: 1px solid var(--border); color: var(--muted);
-  padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 14px;
-  font-family: 'DM Sans', sans-serif; font-weight: 500;
-  display: flex; align-items: center; gap: 6px;
-  transition: all 0.2s;
-}
-.back-btn:hover { border-color: var(--accent); color: var(--accent); }
-.back-btn.hidden-btn { visibility: hidden; pointer-events: none; }
+    .nav-brand {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--text);
+    }
 
-/* Category badge */
-.q-category {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 16px;
-  padding: 4px 12px; background: var(--surface2); border-radius: 100px;
-}
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
 
-.q-text {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(22px, 4vw, 34px);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  margin-bottom: 40px;
-  color: var(--text);
-}
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
 
-/* Visual matrix for pattern questions */
-.pattern-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 3px;
-  width: 180px; margin-bottom: 32px;
-  background: var(--surface2); border-radius: 12px; overflow: hidden; padding: 3px;
-}
-.pattern-cell {
-  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-  background: var(--surface); border-radius: 8px;
-  font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: var(--accent);
-}
-.pattern-cell.empty {
-  background: var(--surface2); border: 2px dashed rgba(99,245,188,0.3);
-  font-size: 20px; color: rgba(99,245,188,0.4);
-}
+    .nav-links a:hover {
+      color: var(--accent);
+    }
 
-.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.option-btn {
-  position: relative; display: flex; align-items: center; gap: 16px;
-  padding: 20px 24px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 16px; cursor: pointer; text-align: left;
-  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
-  overflow: hidden;
-}
-.option-btn::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--accent); transform: scaleY(0); transition: transform 0.2s;
-  border-radius: 0 2px 2px 0;
-}
-.option-btn:hover { border-color: rgba(99,245,188,0.3); background: rgba(99,245,188,0.04); }
-.option-btn:hover::before { transform: scaleY(1); }
-.option-btn.selected { border-color: var(--accent); background: rgba(99,245,188,0.08); }
-.option-btn.selected::before { transform: scaleY(1); }
-.option-btn.correct { border-color: var(--accent); background: rgba(99,245,188,0.12); }
-.option-btn.wrong { border-color: var(--danger); background: rgba(248,113,113,0.08); }
+    /* ─── LAYOUT ─── */
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+      min-height: calc(100vh - 72px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-.option-letter {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
-  background: var(--surface2); color: var(--muted);
-  transition: all 0.2s;
-}
-.option-btn.selected .option-letter { background: var(--accent); color: #000; }
-.option-btn.correct .option-letter { background: var(--accent); color: #000; }
-.option-btn.wrong .option-letter { background: var(--danger); color: #fff; }
+    /* ─── SCREENS ─── */
+    .screen {
+      display: none;
+      animation: fadeUp 0.5s ease both;
+    }
 
-.option-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.4; }
-.option-btn.selected .option-text { color: var(--accent); }
+    .screen.active {
+      display: block;
+    }
 
-/* Analogy display */
-.analogy-display {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
-  flex-wrap: wrap;
-}
-.analogy-pair {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface2); border-radius: 12px; padding: 12px 20px;
-  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
-}
-.analogy-colon { color: var(--accent); font-size: 20px; font-weight: 800; }
-.analogy-arrow { font-size: 20px; color: var(--muted); }
-.analogy-blank {
-  background: rgba(99,245,188,0.1); border: 2px dashed rgba(99,245,188,0.4);
-  color: var(--accent); min-width: 80px; text-align: center;
-}
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
 
-/* Number sequence display */
-.sequence-display {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap;
-}
-.seq-num {
-  width: 56px; height: 56px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800;
-  background: var(--surface2); color: var(--text);
-}
-.seq-num.highlight { background: rgba(99,245,188,0.15); color: var(--accent); border: 1.5px solid rgba(99,245,188,0.3); }
-.seq-dots { color: var(--muted); font-size: 20px; letter-spacing: 2px; }
-.seq-arrow { color: var(--muted); font-size: 16px; }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-/* ─── FEEDBACK BAR ─── */
-.feedback-bar {
-  margin-top: 20px; padding: 16px 20px;
-  border-radius: 12px; display: none;
-  font-size: 14px; font-weight: 500; line-height: 1.5;
-  animation: fadeUp 0.3s ease;
-}
-.feedback-bar.correct { background: rgba(99,245,188,0.1); border: 1px solid rgba(99,245,188,0.2); color: var(--accent); }
-.feedback-bar.wrong { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: var(--danger); }
+    /* ─── INTRO SCREEN ─── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(99, 245, 188, 0.08);
+      border: 1px solid rgba(99, 245, 188, 0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 40px;
+    }
 
-/* ─── NEXT BTN ─── */
-.next-btn {
-  margin-top: 28px; padding: 16px 32px;
-  background: var(--accent); color: #000;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
-  border: none; border-radius: 12px; cursor: pointer;
-  display: none; align-items: center; gap: 8px;
-  transition: all 0.2s;
-}
-.next-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(99,245,188,0.25); }
-.next-btn.show { display: inline-flex; }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
 
-/* ─── LEAD SCREEN ─── */
-#lead-screen {
-  max-width: 520px; margin: 0 auto;
-}
-.screen-title {
-  font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800;
-  letter-spacing: -0.03em; margin-bottom: 12px;
-}
-.screen-sub { font-size: 16px; color: var(--muted); margin-bottom: 40px; line-height: 1.6; }
+    @keyframes pulse {
 
-.score-preview {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px;
-}
-.score-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-  padding: 20px;
-}
-.score-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-.score-card-value {
-  font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent);
-}
+      0%,
+      100% {
+        opacity: 1;
+      }
 
-.form-group { margin-bottom: 16px; }
-.form-input {
-  width: 100%; padding: 16px 20px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px;
-  outline: none; transition: border-color 0.2s;
-}
-.form-input::placeholder { color: var(--muted); }
-.form-input:focus { border-color: var(--accent); }
+      50% {
+        opacity: 0.3;
+      }
+    }
 
-.submit-btn {
-  width: 100%; padding: 18px;
-  background: var(--accent); color: #000;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
-  border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s;
-  margin-top: 8px;
-}
-.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 50px rgba(99,245,188,0.3); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .intro-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(44px, 8vw, 80px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
 
-/* ─── RESULT SCREEN ─── */
-#result-screen { text-align: center; }
-.result-score-ring {
-  width: 200px; height: 200px; margin: 0 auto 40px; position: relative;
-}
-.ring-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
-.ring-bg { fill: none; stroke: var(--surface2); stroke-width: 8; }
-.ring-fill {
-  fill: none; stroke: url(#scoreGrad); stroke-width: 8; stroke-linecap: round;
-  stroke-dasharray: 565; stroke-dashoffset: 565;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1) 0.5s;
-}
-.ring-center {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.ring-score {
-  font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; color: var(--accent);
-  line-height: 1;
-}
-.ring-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .intro-title .accent {
+      color: var(--accent);
+    }
 
-.result-title {
-  font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800;
-  letter-spacing: -0.02em; margin-bottom: 8px;
-}
-.result-tier {
-  display: inline-block; padding: 8px 24px;
-  background: rgba(99,245,188,0.1); border: 1px solid rgba(99,245,188,0.3);
-  border-radius: 100px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em;
-  color: var(--accent); text-transform: uppercase; margin-bottom: 32px;
-}
+    .intro-title .dim {
+      color: var(--muted);
+    }
 
-.result-path {
-  display: inline-block; padding: 14px 32px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
-  border-radius: 100px; margin-bottom: 24px;
-}
+    .intro-sub {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 56px;
+      font-weight: 300;
+    }
 
-.result-desc { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
 
-.result-breakdown {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 48px;
-}
-.breakdown-item {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-  padding: 16px 12px;
-}
-.breakdown-icon { font-size: 22px; margin-bottom: 8px; }
-.breakdown-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-.breakdown-val { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .stat {}
 
-.btn-ghost {
-  background: none; border: 1.5px solid var(--border);
-  color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px;
-  padding: 14px 28px; border-radius: 12px; cursor: pointer; transition: all 0.2s;
-}
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
 
-/* ─── LOADING OVERLAY ─── */
-.loading-overlay {
-  position: fixed; inset: 0; background: rgba(10,10,15,0.9);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 200; display: none;
-}
-.loading-spinner {
-  width: 48px; height: 48px; border-radius: 50%;
-  border: 3px solid var(--surface2); border-top-color: var(--accent);
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+    .stat-num span {
+      color: var(--accent);
+    }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 640px) {
-  nav { padding: 0 20px; }
-  .main { padding: 40px 16px 60px; }
-  .options-grid { grid-template-columns: 1fr; }
-  .info-cards { grid-template-columns: 1fr; }
-  .result-breakdown { grid-template-columns: repeat(2,1fr); }
-  .stats-row { flex-wrap: wrap; gap: 24px; }
-  .score-preview { grid-template-columns: 1fr; }
-  .analogy-display { flex-direction: column; align-items: flex-start; }
-}
-</style>
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 36px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px rgba(99, 245, 188, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-arrow {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s;
+    }
+
+    .btn-primary:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 60px;
+    }
+
+    .info-card {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .info-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .info-card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .info-card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ─── QUIZ SCREEN ─── */
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .q-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .q-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .progress-track {
+      width: 200px;
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 100px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .q-timer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .timer-ring {
+      width: 48px;
+      height: 48px;
+      position: relative;
+    }
+
+    .timer-svg {
+      width: 48px;
+      height: 48px;
+      transform: rotate(-90deg);
+    }
+
+    .timer-bg {
+      fill: none;
+      stroke: var(--surface2);
+      stroke-width: 3;
+    }
+
+    .timer-prog {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 126;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.5s;
+    }
+
+    .timer-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .back-btn.hidden-btn {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Category badge */
+    .q-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding: 4px 12px;
+      background: var(--surface2);
+      border-radius: 100px;
+    }
+
+    .q-text {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+      color: var(--text);
+    }
+
+    /* Visual matrix for pattern questions */
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      width: 180px;
+      margin-bottom: 32px;
+      background: var(--surface2);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: 3px;
+    }
+
+    .pattern-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .pattern-cell.empty {
+      background: var(--surface2);
+      border: 2px dashed rgba(99, 245, 188, 0.3);
+      font-size: 20px;
+      color: rgba(99, 245, 188, 0.4);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .option-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.2s;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .option-btn:hover {
+      border-color: rgba(99, 245, 188, 0.3);
+      background: rgba(99, 245, 188, 0.04);
+    }
+
+    .option-btn:hover::before {
+      transform: scaleY(1);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      background: rgba(99, 245, 188, 0.08);
+    }
+
+    .option-btn.selected::before {
+      transform: scaleY(1);
+    }
+
+    .option-btn.correct {
+      border-color: var(--accent);
+      background: rgba(99, 245, 188, 0.12);
+    }
+
+    .option-btn.wrong {
+      border-color: var(--danger);
+      background: rgba(248, 113, 113, 0.08);
+    }
+
+    .option-letter {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      background: var(--surface2);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .option-btn.selected .option-letter {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .option-btn.correct .option-letter {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .option-btn.wrong .option-letter {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .option-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .option-btn.selected .option-text {
+      color: var(--accent);
+    }
+
+    /* Analogy display */
+    .analogy-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .analogy-pair {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .analogy-colon {
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .analogy-arrow {
+      font-size: 20px;
+      color: var(--muted);
+    }
+
+    .analogy-blank {
+      background: rgba(99, 245, 188, 0.1);
+      border: 2px dashed rgba(99, 245, 188, 0.4);
+      color: var(--accent);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* Number sequence display */
+    .sequence-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .seq-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .seq-num.highlight {
+      background: rgba(99, 245, 188, 0.15);
+      color: var(--accent);
+      border: 1.5px solid rgba(99, 245, 188, 0.3);
+    }
+
+    .seq-dots {
+      color: var(--muted);
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .seq-arrow {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* ─── FEEDBACK BAR ─── */
+    .feedback-bar {
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      display: none;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .feedback-bar.correct {
+      background: rgba(99, 245, 188, 0.1);
+      border: 1px solid rgba(99, 245, 188, 0.2);
+      color: var(--accent);
+    }
+
+    .feedback-bar.wrong {
+      background: rgba(248, 113, 113, 0.08);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+      color: var(--danger);
+    }
+
+    /* ─── NEXT BTN ─── */
+    .next-btn {
+      margin-top: 28px;
+      padding: 16px 32px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(99, 245, 188, 0.25);
+    }
+
+    .next-btn.show {
+      display: inline-flex;
+    }
+
+    /* ─── LEAD SCREEN ─── */
+    #lead-screen {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .screen-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .screen-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .score-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .score-card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .score-card-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 50px rgba(99, 245, 188, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ─── RESULT SCREEN ─── */
+    #result-screen {
+      text-align: center;
+    }
+
+    .result-score-ring {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .ring-svg {
+      width: 200px;
+      height: 200px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--surface2);
+      stroke-width: 8;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke: url(#scoreGrad);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 565;
+      stroke-dashoffset: 565;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-score {
+      font-family: 'Syne', sans-serif;
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .ring-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .result-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .result-tier {
+      display: inline-block;
+      padding: 8px 24px;
+      background: rgba(99, 245, 188, 0.1);
+      border: 1px solid rgba(99, 245, 188, 0.3);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .result-path {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .result-desc {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .result-breakdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .breakdown-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+    }
+
+    .breakdown-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .breakdown-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .breakdown-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .btn-ghost {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── LOADING OVERLAY ─── */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      display: none;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 3px solid var(--surface2);
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .main {
+        padding: 40px 16px 60px;
+      }
+
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .result-breakdown {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-row {
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .score-preview {
+        grid-template-columns: 1fr;
+      }
+
+      .analogy-display {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-orb orb1"></div>
-<div class="bg-orb orb2"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo" onclick="goToHome()">
-    <div class="logo-mark">W</div>
-    <span class="nav-brand">WALCURE</span>
-  </div>
-  <div class="nav-links">
-    <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">← All Tests</a>
-    <a href="results.html" style="color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">My Results</a>
-  </div>
-</nav>
-
-<main class="main">
-
-  <!-- ═══ INTRO SCREEN ═══ -->
-  <div id="intro-screen" class="screen active">
-    <div class="badge"><div class="badge-dot"></div>Cognitive Assessment v2.0</div>
-    <h1 class="intro-title">
-      Discover your<br>
-      <span class="accent">cognitive edge.</span><br>
-      <span class="dim">Find your path.</span>
-    </h1>
-    <p class="intro-sub">12 scientifically-calibrated questions across logic, pattern recognition, verbal reasoning, and spatial thinking — mapped to high-growth careers.</p>
-
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num">12<span>Q</span></div><div class="stat-label">Questions</div></div>
-      <div class="stat"><div class="stat-num">~8<span>min</span></div><div class="stat-label">Average time</div></div>
-      <div class="stat"><div class="stat-num">4<span>+</span></div><div class="stat-label">Career paths</div></div>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo" onclick="goToHome()">
+      <div class="logo-mark">W</div>
+      <span class="nav-brand">WALCURE</span>
     </div>
-
-    <button class="btn-primary" onclick="startQuiz()">
-      Begin Assessment
-      <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-      </svg>
-    </button>
-
-    <div class="info-cards">
-      <div class="info-card">
-        <div class="info-icon">🧠</div>
-        <h4>Cognitive Mapping</h4>
-        <p>Questions designed by cognitive scientists to reveal your thinking patterns.</p>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">🎯</div>
-        <h4>Career Match</h4>
-        <p>Your results are matched against 20+ real-world high-growth career profiles.</p>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">📊</div>
-        <h4>Instant Report</h4>
-        <p>Receive a detailed breakdown with your IQ score and personalized roadmap.</p>
-      </div>
+    <div class="nav-links">
+      <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s"
+        onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">← All Tests</a>
+      <a href="results.html" style="color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s"
+        onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">My Results</a>
     </div>
-  </div>
+  </nav>
 
-  <!-- ═══ QUIZ SCREEN ═══ -->
-  <div id="quiz-screen" class="screen">
-    <div class="quiz-header">
-      <button class="back-btn hidden-btn" id="back-btn" onclick="goBack()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        Back
-      </button>
-      <div class="q-meta">
-        <div class="q-label" id="question-number">Question 1 / 12</div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progress-bar" style="width:8.33%"></div>
+  <main class="main">
+
+    <!-- ═══ INTRO SCREEN ═══ -->
+    <div id="intro-screen" class="screen active">
+      <div class="badge">
+        <div class="badge-dot"></div>Cognitive Assessment v2.0
+      </div>
+      <h1 class="intro-title">
+        Discover your<br>
+        <span class="accent">cognitive edge.</span><br>
+        <span class="dim">Find your path.</span>
+      </h1>
+      <p class="intro-sub">12 scientifically-calibrated questions across logic, pattern recognition, verbal reasoning,
+        and spatial thinking — mapped to high-growth careers.</p>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num">12<span>Q</span></div>
+          <div class="stat-label">Questions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">~8<span>min</span></div>
+          <div class="stat-label">Average time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4<span>+</span></div>
+          <div class="stat-label">Career paths</div>
         </div>
       </div>
-      <div class="timer-ring">
-        <svg class="timer-svg" viewBox="0 0 48 48">
-          <circle class="timer-bg" cx="24" cy="24" r="20"/>
-          <circle class="timer-prog" id="timer-circle" cx="24" cy="24" r="20"/>
+
+      <button class="btn-primary" onclick="startQuiz()">
+        Begin Assessment
+        <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
-        <div class="timer-num" id="timer-num">30</div>
+      </button>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-icon">🧠</div>
+          <h4>Cognitive Mapping</h4>
+          <p>Questions designed by cognitive scientists to reveal your thinking patterns.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🎯</div>
+          <h4>Career Match</h4>
+          <p>Your results are matched against 20+ real-world high-growth career profiles.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📊</div>
+          <h4>Instant Report</h4>
+          <p>Receive a detailed breakdown with your IQ score and personalized roadmap.</p>
+        </div>
       </div>
     </div>
 
-    <div class="q-category" id="q-category">🔢 Numerical</div>
-    <div id="q-visual"></div>
-    <h2 class="q-text" id="question-text">Loading...</h2>
-    <div class="options-grid" id="options-grid"></div>
-    <div class="feedback-bar" id="feedback-bar"></div>
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">
-      Next Question
-      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-      </svg>
-    </button>
+    <!-- ═══ QUIZ SCREEN ═══ -->
+    <div id="quiz-screen" class="screen">
+      <div class="quiz-header">
+        <button class="back-btn hidden-btn" id="back-btn" onclick="goBack()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <div class="q-meta">
+          <div class="q-label" id="question-number">Question 1 / 12</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-bar" style="width:8.33%"></div>
+          </div>
+        </div>
+        <div class="timer-ring">
+          <svg class="timer-svg" viewBox="0 0 48 48">
+            <circle class="timer-bg" cx="24" cy="24" r="20" />
+            <circle class="timer-prog" id="timer-circle" cx="24" cy="24" r="20" />
+          </svg>
+          <div class="timer-num" id="timer-num">30</div>
+        </div>
+      </div>
+
+      <div class="q-category" id="q-category">🔢 Numerical</div>
+      <div id="q-visual"></div>
+      <h2 class="q-text" id="question-text">Loading...</h2>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="feedback-bar" id="feedback-bar"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+        Next Question
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ═══ LEAD SCREEN ═══ -->
+    <div id="lead-screen" class="screen">
+      <div class="badge">
+        <div class="badge-dot"></div>Assessment Complete
+      </div>
+      <h2 class="screen-title">Almost there.</h2>
+      <p class="screen-sub">Your cognitive profile is ready. Enter your details to unlock your full IQ score, career
+        path analysis, and personalized report.</p>
+
+      <div class="score-preview">
+        <div class="score-card">
+          <div class="score-card-label">Raw Score</div>
+          <div class="score-card-value" id="preview-score">—</div>
+        </div>
+        <div class="score-card">
+          <div class="score-card-label">Correct Answers</div>
+          <div class="score-card-value" id="preview-correct">—</div>
+        </div>
+      </div>
+
+      <form id="leadForm">
+        <div class="form-group">
+          <input class="form-input" type="text" id="userName" placeholder="Your Full Name" required>
+        </div>
+        <div class="form-group">
+          <input class="form-input" type="email" id="userEmail" placeholder="Work Email Address" required>
+        </div>
+        <button class="submit-btn" type="submit" id="submitBtn">Unlock My Results →</button>
+      </form>
+    </div>
+
+    <!-- ═══ RESULT SCREEN ═══ -->
+    <div id="result-screen" class="screen">
+      <div class="result-score-ring">
+        <svg class="ring-svg" viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#63f5bc" />
+              <stop offset="100%" stop-color="#a78bfa" />
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="100" cy="100" r="90" />
+          <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="90" />
+        </svg>
+        <div class="ring-center">
+          <div class="ring-score" id="display-score">0</div>
+          <div class="ring-label">IQ Score</div>
+        </div>
+      </div>
+
+      <div class="result-tier" id="result-tier">Emerging Analyst</div>
+      <h2 class="result-title">Your Career Path</h2>
+      <div class="result-path" id="display-path">Data Scientist</div>
+      <p class="result-desc" id="result-desc">Your profile shows strong analytical and systematic thinking...</p>
+
+      <div class="result-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-icon">🔢</div>
+          <div class="breakdown-label">Numerical</div>
+          <div class="breakdown-val" id="score-numerical">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-icon">🔷</div>
+          <div class="breakdown-label">Pattern</div>
+          <div class="breakdown-val" id="score-pattern">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-icon">📖</div>
+          <div class="breakdown-label">Verbal</div>
+          <div class="breakdown-val" id="score-verbal">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-icon">🧩</div>
+          <div class="breakdown-label">Logic</div>
+          <div class="breakdown-val" id="score-logic">—</div>
+        </div>
+      </div>
+
+      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">A detailed report has been sent to your email.
+      </p>
+      <button class="btn-ghost" onclick="goToHome()">Take Another Assessment</button>
+    </div>
+
+  </main>
+
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
   </div>
 
-  <!-- ═══ LEAD SCREEN ═══ -->
-  <div id="lead-screen" class="screen">
-    <div class="badge"><div class="badge-dot"></div>Assessment Complete</div>
-    <h2 class="screen-title">Almost there.</h2>
-    <p class="screen-sub">Your cognitive profile is ready. Enter your details to unlock your full IQ score, career path analysis, and personalized report.</p>
+  <script>
+    // ─── SUPABASE / EMAILJS ───
+    const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    emailjs.init("tuzgf0BVh8DMcd0l1");
 
-    <div class="score-preview">
-      <div class="score-card">
-        <div class="score-card-label">Raw Score</div>
-        <div class="score-card-value" id="preview-score">—</div>
-      </div>
-      <div class="score-card">
-        <div class="score-card-label">Correct Answers</div>
-        <div class="score-card-value" id="preview-correct">—</div>
-      </div>
-    </div>
+    // ─── QUESTIONS ───
+    const questions = [
+      // ── NUMERICAL ──
+      {
+        category: '🔢 Numerical', type: 'sequence',
+        q: 'What is the next number in this sequence?',
+        sequence: [3, 6, 12, 24, '?'],
+        options: ['36', '48', '40', '32'], correct: 1,
+        explanation: 'Each number doubles: 3→6→12→24→48.',
+        weight: 'numerical'
+      },
+      {
+        category: '🔢 Numerical', type: 'sequence',
+        q: 'Identify the missing number in the sequence:',
+        sequence: [1, 4, 9, 16, '?'],
+        options: ['20', '25', '36', '24'], correct: 1,
+        explanation: 'These are perfect squares: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25.',
+        weight: 'numerical'
+      },
+      {
+        category: '🔢 Numerical', type: 'word',
+        q: 'A project team completes 40% of a task in 10 days. At the same rate, how many more days are needed to finish the remaining work?',
+        options: ['10 days', '15 days', '20 days', '25 days'], correct: 1,
+        explanation: '40% took 10 days → 60% needs 15 days.',
+        weight: 'numerical'
+      },
 
-    <form id="leadForm">
-      <div class="form-group">
-        <input class="form-input" type="text" id="userName" placeholder="Your Full Name" required>
-      </div>
-      <div class="form-group">
-        <input class="form-input" type="email" id="userEmail" placeholder="Work Email Address" required>
-      </div>
-      <button class="submit-btn" type="submit" id="submitBtn">Unlock My Results →</button>
-    </form>
-  </div>
+      // ── PATTERN ──
+      {
+        category: '🔷 Pattern', type: 'matrix',
+        q: 'Which value completes the 3×3 matrix?',
+        matrix: [2, 4, 8, 3, 9, 27, 4, 16, '?'],
+        options: ['32', '48', '64', '36'], correct: 2,
+        explanation: 'Each row: n, n², n³. Row 3: 4, 4²=16, 4³=64.',
+        weight: 'pattern'
+      },
+      {
+        category: '🔷 Pattern', type: 'sequence',
+        q: 'What comes next in the series?',
+        sequence: [2, 3, 5, 8, 13, '?'],
+        options: ['18', '21', '20', '15'], correct: 1,
+        explanation: 'Fibonacci pattern: each number = sum of previous two.',
+        weight: 'pattern'
+      },
+      {
+        category: '🔷 Pattern', type: 'word',
+        q: 'If ◆◆◆ = 9, ◆◆◆◆ = 16, ◆◆◆◆◆ = 25 — what does ◆◆◆◆◆◆◆ equal?',
+        options: ['42', '49', '56', '36'], correct: 1,
+        explanation: 'n diamonds = n². So 7 diamonds = 7² = 49.',
+        weight: 'pattern'
+      },
 
-  <!-- ═══ RESULT SCREEN ═══ -->
-  <div id="result-screen" class="screen">
-    <div class="result-score-ring">
-      <svg class="ring-svg" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#63f5bc"/>
-            <stop offset="100%" stop-color="#a78bfa"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="100" cy="100" r="90"/>
-        <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="90"/>
-      </svg>
-      <div class="ring-center">
-        <div class="ring-score" id="display-score">0</div>
-        <div class="ring-label">IQ Score</div>
-      </div>
-    </div>
+      // ── VERBAL / ANALOGY ──
+      {
+        category: '📖 Verbal', type: 'analogy',
+        q: 'Complete the analogy:',
+        analogy: { a: 'Architect', b: 'Blueprint', c: 'Composer', d: '?' },
+        options: ['Orchestra', 'Score', 'Instrument', 'Melody'], correct: 1,
+        explanation: 'An Architect creates a Blueprint; a Composer creates a Score.',
+        weight: 'verbal'
+      },
+      {
+        category: '📖 Verbal', type: 'word',
+        q: 'Choose the word that is most nearly OPPOSITE in meaning to "Pragmatic":',
+        options: ['Practical', 'Idealistic', 'Efficient', 'Realistic'], correct: 1,
+        explanation: 'Pragmatic = practical. Its opposite is Idealistic.',
+        weight: 'verbal'
+      },
+      {
+        category: '📖 Verbal', type: 'analogy',
+        q: 'Complete the analogy:',
+        analogy: { a: 'Microscope', b: 'Biology', c: 'Telescope', d: '?' },
+        options: ['Stars', 'Physics', 'Astronomy', 'Space'], correct: 2,
+        explanation: 'A Microscope is a tool of Biology; a Telescope is a tool of Astronomy.',
+        weight: 'verbal'
+      },
 
-    <div class="result-tier" id="result-tier">Emerging Analyst</div>
-    <h2 class="result-title">Your Career Path</h2>
-    <div class="result-path" id="display-path">Data Scientist</div>
-    <p class="result-desc" id="result-desc">Your profile shows strong analytical and systematic thinking...</p>
+      // ── LOGIC ──
+      {
+        category: '🧩 Logic', type: 'word',
+        q: 'All engineers are problem-solvers. Some problem-solvers are also artists. Which conclusion is necessarily true?',
+        options: [
+          'All engineers are artists',
+          'Some engineers may be artists',
+          'No engineers are artists',
+          'All artists are engineers'
+        ], correct: 1,
+        explanation: 'We can only conclude "some engineers may be artists" — not all or none.',
+        weight: 'logic'
+      },
+      {
+        category: '🧩 Logic', type: 'word',
+        q: 'In a team of 5, A ranks higher than B. C ranks lower than D. E ranks between A and C. Who can definitively be ranked last?',
+        options: ['B', 'C', 'B or C', 'Cannot determine'], correct: 3,
+        explanation: 'Without knowing where D and B rank relative to each other, we cannot determine who is last.',
+        weight: 'logic'
+      },
+      {
+        category: '🧩 Logic', type: 'preference',
+        q: 'Which environment energizes you the most at work?',
+        options: [
+          '🎨 Creative — designing original concepts',
+          '📊 Analytical — working with data and systems',
+          '🏛️ Strategic — leading people and vision',
+          '🤝 Social — communicating and building relationships'
+        ], correct: null,
+        weight: 'preference'
+      }
+    ];
 
-    <div class="result-breakdown">
-      <div class="breakdown-item">
-        <div class="breakdown-icon">🔢</div>
-        <div class="breakdown-label">Numerical</div>
-        <div class="breakdown-val" id="score-numerical">—</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-icon">🔷</div>
-        <div class="breakdown-label">Pattern</div>
-        <div class="breakdown-val" id="score-pattern">—</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-icon">📖</div>
-        <div class="breakdown-label">Verbal</div>
-        <div class="breakdown-val" id="score-verbal">—</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-icon">🧩</div>
-        <div class="breakdown-label">Logic</div>
-        <div class="breakdown-val" id="score-logic">—</div>
-      </div>
-    </div>
+    // ─── STATE ───
+    let currentIdx = 0;
+    let userAnswers = [];
+    let categoryScores = { numerical: 0, pattern: 0, verbal: 0, logic: 0 };
+    let answeredQ = false;
+    let timerInterval = null;
+    let timeLeft = 30;
+    let finalIQ = 100;
+    let finalPath = '';
 
-    <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">A detailed report has been sent to your email.</p>
-    <button class="btn-ghost" onclick="goToHome()">Take Another Assessment</button>
-  </div>
+    // ─── NAV ───
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      target.style.display = 'block';
+      // trigger reflow for animation
+      void target.offsetWidth;
+      target.classList.add('active');
+    }
 
-</main>
+    function goToHome() {
+      currentIdx = 0;
+      userAnswers = [];
+      categoryScores = { numerical: 0, pattern: 0, verbal: 0, logic: 0 };
+      answeredQ = false;
+      clearTimer();
+      showScreen('intro-screen');
+    }
 
-<div class="loading-overlay" id="loading-overlay">
-  <div class="loading-spinner"></div>
-</div>
+    function startQuiz() {
+      showScreen('quiz-screen');
+      renderQuestion();
+    }
 
-<script>
-// ─── SUPABASE / EMAILJS ───
-const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-emailjs.init("tuzgf0BVh8DMcd0l1");
+    function goBack() {
+      if (currentIdx > 0) {
+        clearTimer();
+        currentIdx--;
+        answeredQ = userAnswers[currentIdx] !== undefined;
+        renderQuestion();
+        // If previously answered, show state
+        if (answeredQ) {
+          const selectedIdx = userAnswers[currentIdx];
+          const q = questions[currentIdx];
+          highlightOptions(selectedIdx, q.correct);
+          showFeedback(selectedIdx, q);
+          document.getElementById('next-btn').classList.add('show');
+        }
+      }
+    }
 
-// ─── QUESTIONS ───
-const questions = [
-  // ── NUMERICAL ──
-  {
-    category: '🔢 Numerical', type: 'sequence',
-    q: 'What is the next number in this sequence?',
-    sequence: [3, 6, 12, 24, '?'],
-    options: ['36', '48', '40', '32'], correct: 1,
-    explanation: 'Each number doubles: 3→6→12→24→48.',
-    weight: 'numerical'
-  },
-  {
-    category: '🔢 Numerical', type: 'sequence',
-    q: 'Identify the missing number in the sequence:',
-    sequence: [1, 4, 9, 16, '?'],
-    options: ['20', '25', '36', '24'], correct: 1,
-    explanation: 'These are perfect squares: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25.',
-    weight: 'numerical'
-  },
-  {
-    category: '🔢 Numerical', type: 'word',
-    q: 'A project team completes 40% of a task in 10 days. At the same rate, how many more days are needed to finish the remaining work?',
-    options: ['10 days', '15 days', '20 days', '25 days'], correct: 1,
-    explanation: '40% took 10 days → 60% needs 15 days.',
-    weight: 'numerical'
-  },
+    function nextQuestion() {
+      clearTimer();
+      currentIdx++;
+      if (currentIdx < questions.length) {
+        answeredQ = false;
+        renderQuestion();
+      } else {
+        calculateResults();
+        showScreen('lead-screen');
+      }
+    }
 
-  // ── PATTERN ──
-  {
-    category: '🔷 Pattern', type: 'matrix',
-    q: 'Which value completes the 3×3 matrix?',
-    matrix: [2, 4, 8, 3, 9, 27, 4, 16, '?'],
-    options: ['32', '48', '64', '36'], correct: 2,
-    explanation: 'Each row: n, n², n³. Row 3: 4, 4²=16, 4³=64.',
-    weight: 'pattern'
-  },
-  {
-    category: '🔷 Pattern', type: 'sequence',
-    q: 'What comes next in the series?',
-    sequence: [2, 3, 5, 8, 13, '?'],
-    options: ['18', '21', '20', '15'], correct: 1,
-    explanation: 'Fibonacci pattern: each number = sum of previous two.',
-    weight: 'pattern'
-  },
-  {
-    category: '🔷 Pattern', type: 'word',
-    q: 'If ◆◆◆ = 9, ◆◆◆◆ = 16, ◆◆◆◆◆ = 25 — what does ◆◆◆◆◆◆◆ equal?',
-    options: ['42', '49', '56', '36'], correct: 1,
-    explanation: 'n diamonds = n². So 7 diamonds = 7² = 49.',
-    weight: 'pattern'
-  },
-
-  // ── VERBAL / ANALOGY ──
-  {
-    category: '📖 Verbal', type: 'analogy',
-    q: 'Complete the analogy:',
-    analogy: { a: 'Architect', b: 'Blueprint', c: 'Composer', d: '?' },
-    options: ['Orchestra', 'Score', 'Instrument', 'Melody'], correct: 1,
-    explanation: 'An Architect creates a Blueprint; a Composer creates a Score.',
-    weight: 'verbal'
-  },
-  {
-    category: '📖 Verbal', type: 'word',
-    q: 'Choose the word that is most nearly OPPOSITE in meaning to "Pragmatic":',
-    options: ['Practical', 'Idealistic', 'Efficient', 'Realistic'], correct: 1,
-    explanation: 'Pragmatic = practical. Its opposite is Idealistic.',
-    weight: 'verbal'
-  },
-  {
-    category: '📖 Verbal', type: 'analogy',
-    q: 'Complete the analogy:',
-    analogy: { a: 'Microscope', b: 'Biology', c: 'Telescope', d: '?' },
-    options: ['Stars', 'Physics', 'Astronomy', 'Space'], correct: 2,
-    explanation: 'A Microscope is a tool of Biology; a Telescope is a tool of Astronomy.',
-    weight: 'verbal'
-  },
-
-  // ── LOGIC ──
-  {
-    category: '🧩 Logic', type: 'word',
-    q: 'All engineers are problem-solvers. Some problem-solvers are also artists. Which conclusion is necessarily true?',
-    options: [
-      'All engineers are artists',
-      'Some engineers may be artists',
-      'No engineers are artists',
-      'All artists are engineers'
-    ], correct: 1,
-    explanation: 'We can only conclude "some engineers may be artists" — not all or none.',
-    weight: 'logic'
-  },
-  {
-    category: '🧩 Logic', type: 'word',
-    q: 'In a team of 5, A ranks higher than B. C ranks lower than D. E ranks between A and C. Who can definitively be ranked last?',
-    options: ['B', 'C', 'B or C', 'Cannot determine'], correct: 3,
-    explanation: 'Without knowing where D and B rank relative to each other, we cannot determine who is last.',
-    weight: 'logic'
-  },
-  {
-    category: '🧩 Logic', type: 'preference',
-    q: 'Which environment energizes you the most at work?',
-    options: [
-      '🎨 Creative — designing original concepts',
-      '📊 Analytical — working with data and systems',
-      '🏛️ Strategic — leading people and vision',
-      '🤝 Social — communicating and building relationships'
-    ], correct: null,
-    weight: 'preference'
-  }
-];
-
-// ─── STATE ───
-let currentIdx = 0;
-let userAnswers = [];
-let categoryScores = { numerical: 0, pattern: 0, verbal: 0, logic: 0 };
-let answeredQ = false;
-let timerInterval = null;
-let timeLeft = 30;
-let finalIQ = 100;
-let finalPath = '';
-
-// ─── NAV ───
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => {
-    s.classList.remove('active');
-    s.style.display = 'none';
-  });
-  const target = document.getElementById(id);
-  target.style.display = 'block';
-  // trigger reflow for animation
-  void target.offsetWidth;
-  target.classList.add('active');
-}
-
-function goToHome() {
-  currentIdx = 0;
-  userAnswers = [];
-  categoryScores = { numerical: 0, pattern: 0, verbal: 0, logic: 0 };
-  answeredQ = false;
-  clearTimer();
-  showScreen('intro-screen');
-}
-
-function startQuiz() {
-  showScreen('quiz-screen');
-  renderQuestion();
-}
-
-function goBack() {
-  if (currentIdx > 0) {
-    clearTimer();
-    currentIdx--;
-    answeredQ = userAnswers[currentIdx] !== undefined;
-    renderQuestion();
-    // If previously answered, show state
-    if (answeredQ) {
-      const selectedIdx = userAnswers[currentIdx];
+    // ─── RENDER ───
+    function renderQuestion() {
       const q = questions[currentIdx];
-      highlightOptions(selectedIdx, q.correct);
-      showFeedback(selectedIdx, q);
+      answeredQ = userAnswers[currentIdx] !== undefined;
+
+      document.getElementById('question-number').innerText = `Question ${currentIdx + 1} / ${questions.length}`;
+      document.getElementById('progress-bar').style.width = ((currentIdx + 1) / questions.length * 100) + '%';
+      document.getElementById('q-category').innerText = q.category;
+      document.getElementById('question-text').innerText = q.q;
+      document.getElementById('feedback-bar').style.display = 'none';
+      document.getElementById('next-btn').classList.remove('show');
+
+      // Back button
+      const backBtn = document.getElementById('back-btn');
+      if (currentIdx === 0) backBtn.classList.add('hidden-btn');
+      else backBtn.classList.remove('hidden-btn');
+
+      // Visual element
+      renderVisual(q);
+
+      // Options
+      renderOptions(q);
+
+      // Timer (only if not answered)
+      clearTimer();
+      if (q.correct !== null && !answeredQ) startTimer(q);
+      else if (q.correct === null) {
+        // preference — no timer
+        document.getElementById('timer-num').innerText = '∞';
+        document.getElementById('timer-circle').style.strokeDashoffset = 126;
+      }
+
+      // If already answered, restore state
+      if (answeredQ) {
+        highlightOptions(userAnswers[currentIdx], q.correct);
+        showFeedback(userAnswers[currentIdx], q);
+        document.getElementById('next-btn').classList.add('show');
+        document.getElementById('timer-num').innerText = '—';
+      }
+    }
+
+    function renderVisual(q) {
+      const container = document.getElementById('q-visual');
+      container.innerHTML = '';
+
+      if (q.type === 'sequence') {
+        const div = document.createElement('div');
+        div.className = 'sequence-display';
+        q.sequence.forEach((n, i) => {
+          const cell = document.createElement('div');
+          cell.className = 'seq-num' + (n === '?' ? ' highlight' : '');
+          cell.innerText = n;
+          div.appendChild(cell);
+          if (i < q.sequence.length - 1) {
+            const arr = document.createElement('div');
+            arr.className = 'seq-dots';
+            arr.innerText = '→';
+            div.appendChild(arr);
+          }
+        });
+        container.appendChild(div);
+      } else if (q.type === 'matrix') {
+        const div = document.createElement('div');
+        div.className = 'pattern-grid';
+        q.matrix.forEach(v => {
+          const cell = document.createElement('div');
+          cell.className = 'pattern-cell' + (v === '?' ? ' empty' : '');
+          cell.innerText = v === '?' ? '?' : v;
+          div.appendChild(cell);
+        });
+        container.appendChild(div);
+      } else if (q.type === 'analogy') {
+        const div = document.createElement('div');
+        div.className = 'analogy-display';
+        const p1 = document.createElement('div');
+        p1.className = 'analogy-pair';
+        p1.innerHTML = `<span>${q.analogy.a}</span><span class="analogy-colon">:</span><span>${q.analogy.b}</span>`;
+        const arr = document.createElement('div');
+        arr.className = 'analogy-arrow';
+        arr.innerText = '∷';
+        const p2 = document.createElement('div');
+        p2.className = 'analogy-pair analogy-blank';
+        p2.innerHTML = `<span>${q.analogy.c}</span><span class="analogy-colon">:</span><span>?</span>`;
+        div.appendChild(p1); div.appendChild(arr); div.appendChild(p2);
+        container.appendChild(div);
+      }
+    }
+
+    function renderOptions(q) {
+      const grid = document.getElementById('options-grid');
+      grid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        if (answeredQ && userAnswers[currentIdx] === i) {
+          btn.classList.add('selected');
+        }
+        btn.innerHTML = `<div class="option-letter">${letters[i]}</div><div class="option-text">${opt}</div>`;
+        btn.onclick = () => handleChoice(i);
+        grid.appendChild(btn);
+      });
+    }
+
+    function handleChoice(index) {
+      if (answeredQ) return;
+      answeredQ = true;
+      userAnswers[currentIdx] = index;
+      clearTimer();
+
+      const q = questions[currentIdx];
+      if (q.weight !== 'preference' && q.correct !== null && index === q.correct) {
+        categoryScores[q.weight] = (categoryScores[q.weight] || 0) + 1;
+      }
+
+      highlightOptions(index, q.correct);
+      showFeedback(index, q);
       document.getElementById('next-btn').classList.add('show');
     }
-  }
-}
 
-function nextQuestion() {
-  clearTimer();
-  currentIdx++;
-  if (currentIdx < questions.length) {
-    answeredQ = false;
-    renderQuestion();
-  } else {
-    calculateResults();
-    showScreen('lead-screen');
-  }
-}
+    function highlightOptions(selected, correct) {
+      const btns = document.querySelectorAll('.option-btn');
+      btns.forEach((btn, i) => {
+        btn.onclick = null;
+        if (correct !== null) {
+          if (i === correct) btn.classList.add('correct');
+          else if (i === selected && selected !== correct) btn.classList.add('wrong');
+        } else {
+          if (i === selected) btn.classList.add('selected');
+        }
+      });
+    }
 
-// ─── RENDER ───
-function renderQuestion() {
-  const q = questions[currentIdx];
-  answeredQ = userAnswers[currentIdx] !== undefined;
-
-  document.getElementById('question-number').innerText = `Question ${currentIdx + 1} / ${questions.length}`;
-  document.getElementById('progress-bar').style.width = ((currentIdx + 1) / questions.length * 100) + '%';
-  document.getElementById('q-category').innerText = q.category;
-  document.getElementById('question-text').innerText = q.q;
-  document.getElementById('feedback-bar').style.display = 'none';
-  document.getElementById('next-btn').classList.remove('show');
-
-  // Back button
-  const backBtn = document.getElementById('back-btn');
-  if (currentIdx === 0) backBtn.classList.add('hidden-btn');
-  else backBtn.classList.remove('hidden-btn');
-
-  // Visual element
-  renderVisual(q);
-
-  // Options
-  renderOptions(q);
-
-  // Timer (only if not answered)
-  clearTimer();
-  if (q.correct !== null && !answeredQ) startTimer(q);
-  else if (q.correct === null) {
-    // preference — no timer
-    document.getElementById('timer-num').innerText = '∞';
-    document.getElementById('timer-circle').style.strokeDashoffset = 126;
-  }
-
-  // If already answered, restore state
-  if (answeredQ) {
-    highlightOptions(userAnswers[currentIdx], q.correct);
-    showFeedback(userAnswers[currentIdx], q);
-    document.getElementById('next-btn').classList.add('show');
-    document.getElementById('timer-num').innerText = '—';
-  }
-}
-
-function renderVisual(q) {
-  const container = document.getElementById('q-visual');
-  container.innerHTML = '';
-
-  if (q.type === 'sequence') {
-    const div = document.createElement('div');
-    div.className = 'sequence-display';
-    q.sequence.forEach((n, i) => {
-      const cell = document.createElement('div');
-      cell.className = 'seq-num' + (n === '?' ? ' highlight' : '');
-      cell.innerText = n;
-      div.appendChild(cell);
-      if (i < q.sequence.length - 1) {
-        const arr = document.createElement('div');
-        arr.className = 'seq-dots';
-        arr.innerText = '→';
-        div.appendChild(arr);
+    function showFeedback(selected, q) {
+      const bar = document.getElementById('feedback-bar');
+      if (q.correct === null) {
+        bar.style.display = 'none';
+        return;
       }
-    });
-    container.appendChild(div);
-  } else if (q.type === 'matrix') {
-    const div = document.createElement('div');
-    div.className = 'pattern-grid';
-    q.matrix.forEach(v => {
-      const cell = document.createElement('div');
-      cell.className = 'pattern-cell' + (v === '?' ? ' empty' : '');
-      cell.innerText = v === '?' ? '?' : v;
-      div.appendChild(cell);
-    });
-    container.appendChild(div);
-  } else if (q.type === 'analogy') {
-    const div = document.createElement('div');
-    div.className = 'analogy-display';
-    const p1 = document.createElement('div');
-    p1.className = 'analogy-pair';
-    p1.innerHTML = `<span>${q.analogy.a}</span><span class="analogy-colon">:</span><span>${q.analogy.b}</span>`;
-    const arr = document.createElement('div');
-    arr.className = 'analogy-arrow';
-    arr.innerText = '∷';
-    const p2 = document.createElement('div');
-    p2.className = 'analogy-pair analogy-blank';
-    p2.innerHTML = `<span>${q.analogy.c}</span><span class="analogy-colon">:</span><span>?</span>`;
-    div.appendChild(p1); div.appendChild(arr); div.appendChild(p2);
-    container.appendChild(div);
-  }
-}
-
-function renderOptions(q) {
-  const grid = document.getElementById('options-grid');
-  grid.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    if (answeredQ && userAnswers[currentIdx] === i) {
-      btn.classList.add('selected');
-    }
-    btn.innerHTML = `<div class="option-letter">${letters[i]}</div><div class="option-text">${opt}</div>`;
-    btn.onclick = () => handleChoice(i);
-    grid.appendChild(btn);
-  });
-}
-
-function handleChoice(index) {
-  if (answeredQ) return;
-  answeredQ = true;
-  userAnswers[currentIdx] = index;
-  clearTimer();
-
-  const q = questions[currentIdx];
-  if (q.weight !== 'preference' && q.correct !== null && index === q.correct) {
-    categoryScores[q.weight] = (categoryScores[q.weight] || 0) + 1;
-  }
-
-  highlightOptions(index, q.correct);
-  showFeedback(index, q);
-  document.getElementById('next-btn').classList.add('show');
-}
-
-function highlightOptions(selected, correct) {
-  const btns = document.querySelectorAll('.option-btn');
-  btns.forEach((btn, i) => {
-    btn.onclick = null;
-    if (correct !== null) {
-      if (i === correct) btn.classList.add('correct');
-      else if (i === selected && selected !== correct) btn.classList.add('wrong');
-    } else {
-      if (i === selected) btn.classList.add('selected');
-    }
-  });
-}
-
-function showFeedback(selected, q) {
-  const bar = document.getElementById('feedback-bar');
-  if (q.correct === null) {
-    bar.style.display = 'none';
-    return;
-  }
-  bar.style.display = 'block';
-  if (selected === q.correct) {
-    bar.className = 'feedback-bar correct';
-    bar.innerHTML = `✓ Correct! ${q.explanation}`;
-  } else {
-    bar.className = 'feedback-bar wrong';
-    bar.innerHTML = `✗ Not quite. ${q.explanation}`;
-  }
-}
-
-// ─── TIMER ───
-function startTimer(q) {
-  timeLeft = 30;
-  updateTimerDisplay();
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
-    if (timeLeft <= 0) {
-      clearTimer();
-      if (!answeredQ) {
-        answeredQ = true;
-        userAnswers[currentIdx] = -1; // timed out
-        highlightOptions(-1, q.correct);
-        showFeedback(-1, q);
-        document.getElementById('next-btn').classList.add('show');
+      bar.style.display = 'block';
+      if (selected === q.correct) {
+        bar.className = 'feedback-bar correct';
+        bar.innerHTML = `✓ Correct! ${q.explanation}`;
+      } else {
+        bar.className = 'feedback-bar wrong';
+        bar.innerHTML = `✗ Not quite. ${q.explanation}`;
       }
     }
-  }, 1000);
-}
 
-function updateTimerDisplay() {
-  const circle = document.getElementById('timer-circle');
-  const numEl = document.getElementById('timer-num');
-  const pct = timeLeft / 30;
-  const circumference = 126;
-  circle.style.strokeDashoffset = circumference * (1 - pct);
-  numEl.innerText = timeLeft;
-  if (timeLeft <= 10) circle.style.stroke = '#f87171';
-  else circle.style.stroke = '';
-}
+    // ─── TIMER ───
+    function startTimer(q) {
+      timeLeft = 30;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearTimer();
+          if (!answeredQ) {
+            answeredQ = true;
+            userAnswers[currentIdx] = -1; // timed out
+            highlightOptions(-1, q.correct);
+            showFeedback(-1, q);
+            document.getElementById('next-btn').classList.add('show');
+          }
+        }
+      }, 1000);
+    }
 
-function clearTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = null;
-}
+    function updateTimerDisplay() {
+      const circle = document.getElementById('timer-circle');
+      const numEl = document.getElementById('timer-num');
+      const pct = timeLeft / 30;
+      const circumference = 126;
+      circle.style.strokeDashoffset = circumference * (1 - pct);
+      numEl.innerText = timeLeft;
+      if (timeLeft <= 10) circle.style.stroke = '#f87171';
+      else circle.style.stroke = '';
+    }
 
-// ─── RESULTS ───
-function calculateResults() {
-  const total = questions.filter(q => q.correct !== null).length;
-  const correct = Object.values(categoryScores).reduce((a,b)=>a+b,0);
+    function clearTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+    }
 
-  // IQ calculation (base 80, up to 148 based on score)
-  finalIQ = Math.round(80 + (correct / total) * 68);
+    // ─── RESULTS ───
+    function calculateResults() {
+      const total = questions.filter(q => q.correct !== null).length;
+      const correct = Object.values(categoryScores).reduce((a, b) => a + b, 0);
 
-  // Career path from last question (preference) + dominant category
-  const prefAnswer = userAnswers[questions.length - 1];
-  const catMaxKey = Object.keys(categoryScores).reduce((a,b) => categoryScores[a]>categoryScores[b]?a:b);
+      // IQ calculation (base 80, up to 148 based on score)
+      finalIQ = Math.round(80 + (correct / total) * 68);
 
-  const paths = {
-    0: { path: 'Creative Director', desc: 'Your visual-spatial and creative cognition is exceptional. You excel at translating complex ideas into compelling experiences and leading design-driven teams.' },
-    1: { path: 'Data Scientist', desc: 'Your analytical and pattern-recognition abilities are top-tier. You thrive in data-rich environments, finding signal in noise and building predictive systems.' },
-    2: { path: 'Operations CEO', desc: 'Your logical and strategic reasoning places you in the top tier of systems thinkers. You are built to lead organizations, align resources, and execute at scale.' },
-    3: { path: 'PR Strategist', desc: 'Your verbal reasoning and social cognition are your superpowers. You excel at crafting narratives, managing perception, and building influential relationships.' }
-  };
+      // Career path from last question (preference) + dominant category
+      const prefAnswer = userAnswers[questions.length - 1];
+      const catMaxKey = Object.keys(categoryScores).reduce((a, b) => categoryScores[a] > categoryScores[b] ? a : b);
 
-  const chosen = paths[prefAnswer] || paths[1];
-  finalPath = chosen.path;
+      const paths = {
+        0: { path: 'Creative Director', desc: 'Your visual-spatial and creative cognition is exceptional. You excel at translating complex ideas into compelling experiences and leading design-driven teams.' },
+        1: { path: 'Data Scientist', desc: 'Your analytical and pattern-recognition abilities are top-tier. You thrive in data-rich environments, finding signal in noise and building predictive systems.' },
+        2: { path: 'Operations CEO', desc: 'Your logical and strategic reasoning places you in the top tier of systems thinkers. You are built to lead organizations, align resources, and execute at scale.' },
+        3: { path: 'PR Strategist', desc: 'Your verbal reasoning and social cognition are your superpowers. You excel at crafting narratives, managing perception, and building influential relationships.' }
+      };
 
-  // Update lead screen preview
-  document.getElementById('preview-score').innerText = finalIQ;
-  document.getElementById('preview-correct').innerText = `${correct} / ${total}`;
+      const chosen = paths[prefAnswer] || paths[1];
+      finalPath = chosen.path;
 
-  // Update result screen
-  document.getElementById('display-score').innerText = finalIQ;
-  document.getElementById('display-path').innerText = finalPath;
-  document.getElementById('result-desc').innerText = chosen.desc;
+      // Update lead screen preview
+      document.getElementById('preview-score').innerText = finalIQ;
+      document.getElementById('preview-correct').innerText = `${correct} / ${total}`;
 
-  const tiers = [
-    { min: 130, label: 'Gifted — Top 2%' },
-    { min: 120, label: 'Superior Intelligence' },
-    { min: 110, label: 'High Average' },
-    { min: 100, label: 'Average — Solid Foundation' },
-    { min: 0, label: 'Developing — Keep Going' }
-  ];
-  document.getElementById('result-tier').innerText = tiers.find(t => finalIQ >= t.min)?.label || tiers[4].label;
+      // Update result screen
+      document.getElementById('display-score').innerText = finalIQ;
+      document.getElementById('display-path').innerText = finalPath;
+      document.getElementById('result-desc').innerText = chosen.desc;
 
-  // Category breakdown
-  const catQ = { numerical: 3, pattern: 3, verbal: 3, logic: 2 };
-  document.getElementById('score-numerical').innerText = `${categoryScores.numerical}/${catQ.numerical}`;
-  document.getElementById('score-pattern').innerText = `${categoryScores.pattern}/${catQ.pattern}`;
-  document.getElementById('score-verbal').innerText = `${categoryScores.verbal}/${catQ.verbal}`;
-  document.getElementById('score-logic').innerText = `${categoryScores.logic}/${catQ.logic}`;
+      const tiers = [
+        { min: 130, label: 'Gifted — Top 2%' },
+        { min: 120, label: 'Superior Intelligence' },
+        { min: 110, label: 'High Average' },
+        { min: 100, label: 'Average — Solid Foundation' },
+        { min: 0, label: 'Developing — Keep Going' }
+      ];
+      document.getElementById('result-tier').innerText = tiers.find(t => finalIQ >= t.min)?.label || tiers[4].label;
 
-  // Animate ring
-  setTimeout(() => {
-    const pct = (finalIQ - 80) / 68;
-    const circ = 565;
-    document.getElementById('ring-fill').style.strokeDashoffset = circ - (circ * Math.min(pct, 1));
+      // Category breakdown
+      const catQ = { numerical: 3, pattern: 3, verbal: 3, logic: 2 };
+      document.getElementById('score-numerical').innerText = `${categoryScores.numerical}/${catQ.numerical}`;
+      document.getElementById('score-pattern').innerText = `${categoryScores.pattern}/${catQ.pattern}`;
+      document.getElementById('score-verbal').innerText = `${categoryScores.verbal}/${catQ.verbal}`;
+      document.getElementById('score-logic').innerText = `${categoryScores.logic}/${catQ.logic}`;
 
-    // Count up score
-    let counter = 80;
-    const end = finalIQ;
-    const step = Math.ceil((end - 80) / 60);
-    const countInterval = setInterval(() => {
-      counter = Math.min(counter + step, end);
-      document.getElementById('display-score').innerText = counter;
-      if (counter >= end) clearInterval(countInterval);
-    }, 25);
-  }, 600);
-}
+      // Animate ring
+      setTimeout(() => {
+        const pct = (finalIQ - 80) / 68;
+        const circ = 565;
+        document.getElementById('ring-fill').style.strokeDashoffset = circ - (circ * Math.min(pct, 1));
 
-// ─── FORM SUBMIT ───
-document.getElementById('leadForm').onsubmit = async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const overlay = document.getElementById('loading-overlay');
-  btn.disabled = true;
-  btn.innerText = 'Processing...';
-  overlay.style.display = 'flex';
+        // Count up score
+        let counter = 80;
+        const end = finalIQ;
+        const step = Math.ceil((end - 80) / 60);
+        const countInterval = setInterval(() => {
+          counter = Math.min(counter + step, end);
+          document.getElementById('display-score').innerText = counter;
+          if (counter >= end) clearInterval(countInterval);
+        }, 25);
+      }, 600);
+    }
 
-  const name = document.getElementById('userName').value;
-  const email = document.getElementById('userEmail').value;
+    // ─── FORM SUBMIT ───
+    document.getElementById('leadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const overlay = document.getElementById('loading-overlay');
+      btn.disabled = true;
+      btn.innerText = 'Processing...';
+      overlay.style.display = 'flex';
 
-  try {
-    await supabaseClient.from('career_tests').insert([{
-      name, email, iq_score: finalIQ, career_path: finalPath
-    }]);
-  } catch(e) {}
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('userEmail').value;
 
-  try {
-    await emailjs.send("service_qq96gby", "template_f3jm56x", {
-      name, email, iq_score: finalIQ, career_path: finalPath
-    });
-  } catch(e) {}
+      try {
+        await supabaseClient.from('career_tests').insert([{
+          name, email, iq_score: finalIQ, career_path: finalPath
+        }]);
+      } catch (e) { }
 
-  overlay.style.display = 'none';
-  showScreen('result-screen');
-  calculateResults();
-};
+      try {
+        await emailjs.send("service_qq96gby", "template_f3jm56x", {
+          name, email, iq_score: finalIQ, career_path: finalPath
+        });
+      } catch (e) { }
 
-// Init
-showScreen('intro-screen');
-</script>
+      overlay.style.display = 'none';
+      showScreen('result-screen');
+      calculateResults();
+    };
+
+    // Init
+    showScreen('intro-screen');
+  </script>
 </body>
+
 </html>

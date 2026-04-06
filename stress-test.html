@@ -1,306 +1,885 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walcure | Stress & Burnout Check</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<style>
-:root{--bg:#0a0a0f;--surface:#13131e;--surface2:#1c1c2e;--border:rgba(255,255,255,0.07);--accent:#f563a0;--accent2:#f59e63;--text:#eeeef5;--muted:#6b6b85}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(245,99,160,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,99,160,0.025) 1px,transparent 1px);background-size:72px 72px}
-.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
-.o1{width:500px;height:500px;background:rgba(245,99,160,0.07);top:-150px;right:-100px}
-.o2{width:400px;height:400px;background:rgba(245,159,99,0.05);bottom:-100px;left:-150px}
-nav{position:sticky;top:0;z-index:100;height:72px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-mark{width:38px;height:38px;background:linear-gradient(135deg,#f563a0,#f59e63);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#000}
-.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;color:var(--text)}
-.nav-link{color:var(--muted);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
-.nav-link:hover{color:var(--accent)}
-.main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:60px 24px 80px;min-height:calc(100vh - 72px);display:flex;flex-direction:column;justify-content:center}
-.screen{display:none;animation:fadeUp .5s ease both}
-.screen.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walcure | Stress & Burnout Check</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131e;
+      --surface2: #1c1c2e;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #f563a0;
+      --accent2: #f59e63;
+      --text: #eeeef5;
+      --muted: #6b6b85
+    }
 
-.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;background:rgba(245,99,160,0.08);border:1px solid rgba(245,99,160,0.2);border-radius:100px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:32px}
-.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.intro-title{font-family:'Syne',sans-serif;font-size:clamp(40px,7vw,72px);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:24px}
-.intro-title .g{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.intro-sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:40px;font-weight:300}
-.warning-note{background:rgba(245,99,160,.07);border:1px solid rgba(245,99,160,.15);border-radius:14px;padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:40px}
-.warning-note strong{color:var(--accent)}
-.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:18px 36px;background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;border:none;border-radius:14px;cursor:pointer;transition:all .2s}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(245,99,160,.35)}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* QUIZ */
-.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
-.q-label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-.progress-track{width:220px;height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .6s ease}
-.back-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:10px 18px;border-radius:10px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;display:flex;align-items:center;gap:6px;transition:all .2s}
-.back-btn:hover{border-color:var(--accent);color:var(--accent)}
-.invisible{visibility:hidden;pointer-events:none}
-.q-cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding:4px 14px;background:var(--surface2);border-radius:100px}
-.q-text{font-family:'Syne',sans-serif;font-size:clamp(20px,3.5vw,30px);font-weight:700;letter-spacing:-.02em;line-height:1.3;margin-bottom:12px;color:var(--text)}
-.q-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
-.freq-options{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.freq-btn{padding:14px 6px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);text-align:center;line-height:1.4}
-.freq-btn:hover{border-color:rgba(245,99,160,.4);color:var(--accent)}
-.freq-btn.selected{border-color:var(--accent);background:rgba(245,99,160,.1);color:var(--accent)}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden
+    }
 
-/* LEAD */
-.lead-wrap{max-width:480px;margin:0 auto;text-align:center}
-.screen-title{font-family:'Syne',sans-serif;font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
-.screen-sub{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.7}
-.stress-preview{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;line-height:1;margin-bottom:8px}
-.stress-preview-label{font-size:14px;color:var(--muted);margin-bottom:28px}
-.form-input{width:100%;padding:16px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;margin-bottom:12px}
-.form-input::placeholder{color:var(--muted)}
-.form-input:focus{border-color:var(--accent)}
-.submit-btn{width:100%;padding:18px;background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;border:none;border-radius:14px;cursor:pointer;transition:all .2s}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 12px 40px rgba(245,99,160,.35)}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: linear-gradient(rgba(245, 99, 160, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 99, 160, 0.025) 1px, transparent 1px);
+      background-size: 72px 72px
+    }
 
-/* RESULT */
-.result-center{text-align:center}
-.stress-dial{width:200px;height:200px;margin:0 auto 32px;position:relative}
-.dial-svg{width:200px;height:200px;transform:rotate(135deg)}
-.dial-bg{fill:none;stroke:var(--surface2);stroke-width:14;stroke-linecap:round}
-.dial-fill{fill:none;stroke-width:14;stroke-linecap:round;stroke-dasharray:339;stroke-dashoffset:339;transition:stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1) .3s}
-.dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.dial-pct{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1}
-.dial-label{font-size:12px;color:var(--muted);margin-top:4px}
-.risk-badge{display:inline-block;padding:10px 24px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:32px}
-.result-desc-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;text-align:left}
-.result-desc-box h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px}
-.result-desc-box p{font-size:14px;color:var(--muted);line-height:1.7}
-.tips-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.tips-list li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);line-height:1.5}
-.tips-list li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
-.dimension-bars{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-@media(max-width:540px){.dimension-bars{grid-template-columns:1fr}.freq-options{grid-template-columns:repeat(3,1fr)}}
-.dim-bar-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}
-.dim-bar-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600}
-.dim-bar-track{height:5px;background:var(--surface2);border-radius:100px;overflow:hidden;margin-bottom:6px}
-.dim-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease .5s}
-.dim-bar-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
-.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;font-size:14px;padding:14px 28px;border-radius:12px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;margin-top:16px}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-@media(max-width:540px){nav{padding:0 20px}.main{padding:40px 16px 60px}}
-</style>
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0
+    }
+
+    .o1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(245, 99, 160, 0.07);
+      top: -150px;
+      right: -100px
+    }
+
+    .o2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(245, 159, 99, 0.05);
+      bottom: -100px;
+      left: -150px
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 72px;
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #f563a0, #f59e63);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #000
+    }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: .08em;
+      color: var(--text)
+    }
+
+    .nav-link {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .2s
+    }
+
+    .nav-link:hover {
+      color: var(--accent)
+    }
+
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+      min-height: calc(100vh - 72px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .screen {
+      display: none;
+      animation: fadeUp .5s ease both
+    }
+
+    .screen.active {
+      display: block
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(245, 99, 160, 0.08);
+      border: 1px solid rgba(245, 99, 160, 0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    .intro-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(40px, 7vw, 72px);
+      font-weight: 800;
+      letter-spacing: -.04em;
+      line-height: 1;
+      margin-bottom: 24px
+    }
+
+    .intro-title .g {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .intro-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 40px;
+      font-weight: 300
+    }
+
+    .warning-note {
+      background: rgba(245, 99, 160, .07);
+      border: 1px solid rgba(245, 99, 160, .15);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 40px
+    }
+
+    .warning-note strong {
+      color: var(--accent)
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 36px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 50px rgba(245, 99, 160, .35)
+    }
+
+    /* QUIZ */
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px
+    }
+
+    .q-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px
+    }
+
+    .progress-track {
+      width: 220px;
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 100px;
+      overflow: hidden
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 100px;
+      transition: width .6s ease
+    }
+
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .invisible {
+      visibility: hidden;
+      pointer-events: none
+    }
+
+    .q-cat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding: 4px 14px;
+      background: var(--surface2);
+      border-radius: 100px
+    }
+
+    .q-text {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 3.5vw, 30px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: var(--text)
+    }
+
+    .q-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px
+    }
+
+    .freq-options {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px
+    }
+
+    .freq-btn {
+      padding: 14px 6px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all .2s;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.4
+    }
+
+    .freq-btn:hover {
+      border-color: rgba(245, 99, 160, .4);
+      color: var(--accent)
+    }
+
+    .freq-btn.selected {
+      border-color: var(--accent);
+      background: rgba(245, 99, 160, .1);
+      color: var(--accent)
+    }
+
+    /* LEAD */
+    .lead-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center
+    }
+
+    .screen-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 12px
+    }
+
+    .screen-sub {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.7
+    }
+
+    .stress-preview {
+      font-family: 'Syne', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px
+    }
+
+    .stress-preview-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 12px
+    }
+
+    .form-input::placeholder {
+      color: var(--muted)
+    }
+
+    .form-input:focus {
+      border-color: var(--accent)
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 40px rgba(245, 99, 160, .35)
+    }
+
+    .submit-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    /* RESULT */
+    .result-center {
+      text-align: center
+    }
+
+    .stress-dial {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 32px;
+      position: relative
+    }
+
+    .dial-svg {
+      width: 200px;
+      height: 200px;
+      transform: rotate(135deg)
+    }
+
+    .dial-bg {
+      fill: none;
+      stroke: var(--surface2);
+      stroke-width: 14;
+      stroke-linecap: round
+    }
+
+    .dial-fill {
+      fill: none;
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 339;
+      stroke-dashoffset: 339;
+      transition: stroke-dashoffset 1.5s cubic-bezier(.4, 0, .2, 1) .3s
+    }
+
+    .dial-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
+
+    .dial-pct {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1
+    }
+
+    .dial-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px
+    }
+
+    .risk-badge {
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 32px
+    }
+
+    .result-desc-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 16px;
+      text-align: left
+    }
+
+    .result-desc-box h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px
+    }
+
+    .result-desc-box p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    .tips-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .tips-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5
+    }
+
+    .tips-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .dimension-bars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    @media(max-width:540px) {
+      .dimension-bars {
+        grid-template-columns: 1fr
+      }
+
+      .freq-options {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    .dim-bar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px
+    }
+
+    .dim-bar-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 600
+    }
+
+    .dim-bar-track {
+      height: 5px;
+      background: var(--surface2);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 6px
+    }
+
+    .dim-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 1.2s ease .5s
+    }
+
+    .dim-bar-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .btn-ghost {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 16px
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    @media(max-width:540px) {
+      nav {
+        padding: 0 20px
+      }
+
+      .main {
+        padding: 40px 16px 60px
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="bg-grid"></div>
-<div class="orb o1"></div>
-<div class="orb o2"></div>
-<nav>
-  <a class="logo" href="index.html">
-    <div class="logo-mark">W</div>
-    <span class="logo-text">WALCURE</span>
-  </a>
-  <div style="display:flex;gap:20px;align-items:center">
-    <a class="nav-link" href="index.html">← All Tests</a>
-    <a class="nav-link" href="results.html">My Results</a>
-  </div>
-</nav>
-<main class="main">
+  <div class="bg-grid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-mark">W</div>
+      <span class="logo-text">WALCURE</span>
+    </a>
+    <div style="display:flex;gap:20px;align-items:center">
+      <a class="nav-link" href="index.html">← All Tests</a>
+      <a class="nav-link" href="results.html">My Results</a>
+    </div>
+  </nav>
+  <main class="main">
 
-  <!-- INTRO -->
-  <div id="intro-screen" class="screen active">
-    <div class="badge"><div class="badge-dot"></div>Wellness · 10 Questions · ~3 min</div>
-    <h1 class="intro-title">How stressed<br><span class="g">are you really?</span></h1>
-    <p class="intro-sub">Based on the validated Perceived Stress Scale (PSS-10), this assessment measures your current stress load and burnout risk — then gives you actionable steps to recover.</p>
-    <div class="warning-note"><strong>Note:</strong> This is a wellness tool for self-awareness, not a medical diagnosis. If you are experiencing a mental health crisis, please contact a qualified healthcare professional.</div>
-    <button class="btn-primary" onclick="startTest()">
-      Start Stress Check
-      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-    </button>
-  </div>
-
-  <!-- QUIZ -->
-  <div id="quiz-screen" class="screen">
-    <div class="quiz-header">
-      <button class="back-btn invisible" id="back-btn" onclick="goBack()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-        Back
-      </button>
-      <div>
-        <div class="q-label" id="q-number">Question 1 / 10</div>
-        <div class="progress-track"><div class="progress-fill" id="progress-bar" style="width:10%"></div></div>
+    <!-- INTRO -->
+    <div id="intro-screen" class="screen active">
+      <div class="badge">
+        <div class="badge-dot"></div>Wellness · 10 Questions · ~3 min
       </div>
-      <div style="width:80px"></div>
-    </div>
-    <div class="q-cat" id="q-cat">💆 Stress</div>
-    <h2 class="q-text" id="q-text">Loading...</h2>
-    <p class="q-sub">In the last month, how often have you felt this way?</p>
-    <div class="freq-options" id="freq-options"></div>
-  </div>
-
-  <!-- LEAD -->
-  <div id="lead-screen" class="screen">
-    <div class="lead-wrap">
-      <div class="badge"><div class="badge-dot"></div>Assessment Complete</div>
-      <div class="stress-preview" id="stress-preview">—</div>
-      <div class="stress-preview-label" id="stress-level-label">Stress level detected</div>
-      <h2 class="screen-title">Get your full report.</h2>
-      <p class="screen-sub">Enter your details to receive your complete stress analysis, burnout risk score, and personalized recovery plan.</p>
-      <form id="leadForm">
-        <input class="form-input" type="text" id="userName" placeholder="Your Full Name" required>
-        <input class="form-input" type="email" id="userEmail" placeholder="Email Address" required>
-        <button class="submit-btn" type="submit" id="submitBtn">Send My Wellness Report →</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- RESULT -->
-  <div id="result-screen" class="screen">
-    <div class="result-center">
-      <div class="stress-dial">
-        <svg class="dial-svg" viewBox="0 0 200 200">
-          <circle class="dial-bg" cx="100" cy="100" r="54" stroke-dasharray="339" stroke-dashoffset="84.75"/>
-          <circle class="dial-fill" id="dial-fill" cx="100" cy="100" r="54"/>
+      <h1 class="intro-title">How stressed<br><span class="g">are you really?</span></h1>
+      <p class="intro-sub">Based on the validated Perceived Stress Scale (PSS-10), this assessment measures your current
+        stress load and burnout risk — then gives you actionable steps to recover.</p>
+      <div class="warning-note"><strong>Note:</strong> This is a wellness tool for self-awareness, not a medical
+        diagnosis. If you are experiencing a mental health crisis, please contact a qualified healthcare professional.
+      </div>
+      <button class="btn-primary" onclick="startTest()">
+        Start Stress Check
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
-        <div class="dial-center">
-          <div class="dial-pct" id="dial-pct">0%</div>
-          <div class="dial-label">Stress Score</div>
-        </div>
-      </div>
-
-      <div class="risk-badge" id="risk-badge">Low Risk</div>
-      <div class="dimension-bars" id="dim-bars"></div>
-      <div class="result-desc-box" id="result-overview"></div>
-      <div class="result-desc-box">
-        <h3>Your Recovery Plan</h3>
-        <ul class="tips-list" id="tips-list"></ul>
-      </div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;margin-top:8px">Your full wellness report has been sent to your email.</p>
-      <a class="btn-ghost" href="index.html">Explore Other Tests</a>
+      </button>
     </div>
-  </div>
 
-</main>
-<script>
-const SUPABASE_URL='https://ngmzvmgsddiemeznmvoh.supabase.co';
-const SUPABASE_KEY='sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-emailjs.init("tuzgf0BVh8DMcd0l1");
+    <!-- QUIZ -->
+    <div id="quiz-screen" class="screen">
+      <div class="quiz-header">
+        <button class="back-btn invisible" id="back-btn" onclick="goBack()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <div>
+          <div class="q-label" id="q-number">Question 1 / 10</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-bar" style="width:10%"></div>
+          </div>
+        </div>
+        <div style="width:80px"></div>
+      </div>
+      <div class="q-cat" id="q-cat">💆 Stress</div>
+      <h2 class="q-text" id="q-text">Loading...</h2>
+      <p class="q-sub">In the last month, how often have you felt this way?</p>
+      <div class="freq-options" id="freq-options"></div>
+    </div>
 
-// PSS-10 based questions. reversed=true means higher answer = LOWER stress
-const questions=[
-  {cat:'💆 Stress',q:'Been upset because of something that happened unexpectedly',reversed:false},
-  {cat:'💆 Control',q:'Felt that you were unable to control the important things in your life',reversed:false},
-  {cat:'💆 Overwhelm',q:'Felt nervous and stressed',reversed:false},
-  {cat:'💪 Coping',q:'Felt confident about your ability to handle your personal problems',reversed:true},
-  {cat:'💪 Coping',q:'Felt that things were going your way',reversed:true},
-  {cat:'💆 Overwhelm',q:'Found that you could not cope with all the things that you had to do',reversed:false},
-  {cat:'💪 Coping',q:'Been able to control irritations in your life',reversed:true},
-  {cat:'💆 Control',q:'Felt that you were on top of things',reversed:true},
-  {cat:'💆 Stress',q:'Been angered because of things that were outside of your control',reversed:false},
-  {cat:'💆 Overwhelm',q:'Felt difficulties were piling up so high that you could not overcome them',reversed:false},
-];
+    <!-- LEAD -->
+    <div id="lead-screen" class="screen">
+      <div class="lead-wrap">
+        <div class="badge">
+          <div class="badge-dot"></div>Assessment Complete
+        </div>
+        <div class="stress-preview" id="stress-preview">—</div>
+        <div class="stress-preview-label" id="stress-level-label">Stress level detected</div>
+        <h2 class="screen-title">Get your full report.</h2>
+        <p class="screen-sub">Enter your details to receive your complete stress analysis, burnout risk score, and
+          personalized recovery plan.</p>
+        <form id="leadForm">
+          <input class="form-input" type="text" id="userName" placeholder="Your Full Name" required>
+          <input class="form-input" type="email" id="userEmail" placeholder="Email Address" required>
+          <button class="submit-btn" type="submit" id="submitBtn">Send My Wellness Report →</button>
+        </form>
+      </div>
+    </div>
 
-const freqLabels=['Never','Almost\nNever','Sometimes','Fairly\nOften','Very\nOften'];
+    <!-- RESULT -->
+    <div id="result-screen" class="screen">
+      <div class="result-center">
+        <div class="stress-dial">
+          <svg class="dial-svg" viewBox="0 0 200 200">
+            <circle class="dial-bg" cx="100" cy="100" r="54" stroke-dasharray="339" stroke-dashoffset="84.75" />
+            <circle class="dial-fill" id="dial-fill" cx="100" cy="100" r="54" />
+          </svg>
+          <div class="dial-center">
+            <div class="dial-pct" id="dial-pct">0%</div>
+            <div class="dial-label">Stress Score</div>
+          </div>
+        </div>
 
-let currentIdx=0;
-let answers=[];
-let finalScore=0;
-let finalLevel='';
+        <div class="risk-badge" id="risk-badge">Low Risk</div>
+        <div class="dimension-bars" id="dim-bars"></div>
+        <div class="result-desc-box" id="result-overview"></div>
+        <div class="result-desc-box">
+          <h3>Your Recovery Plan</h3>
+          <ul class="tips-list" id="tips-list"></ul>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;margin-top:8px">Your full wellness report has
+          been sent to your email.</p>
+        <a class="btn-ghost" href="index.html">Explore Other Tests</a>
+      </div>
+    </div>
 
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none'});
-  const t=document.getElementById(id);t.style.display='block';void t.offsetWidth;t.classList.add('active');
-}
-function startTest(){showScreen('quiz-screen');renderQ();}
-function goBack(){if(currentIdx>0){currentIdx--;renderQ();}}
+  </main>
+  <script>
+    const SUPABASE_URL = 'https://ngmzvmgsddiemeznmvoh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_VIO-91cj_hjORjt1OgTd_A_zJnE9GrJ';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    emailjs.init("tuzgf0BVh8DMcd0l1");
 
-function renderQ(){
-  const q=questions[currentIdx];
-  document.getElementById('q-number').innerText=`Question ${currentIdx+1} / ${questions.length}`;
-  document.getElementById('progress-bar').style.width=((currentIdx+1)/questions.length*100)+'%';
-  document.getElementById('q-cat').innerText=q.cat;
-  document.getElementById('q-text').innerText=q.q+'?';
-  const backBtn=document.getElementById('back-btn');
-  if(currentIdx===0)backBtn.classList.add('invisible');else backBtn.classList.remove('invisible');
-  const opts=document.getElementById('freq-options');
-  opts.innerHTML='';
-  freqLabels.forEach((label,i)=>{
-    const btn=document.createElement('button');
-    btn.className='freq-btn'+(answers[currentIdx]===i?' selected':'');
-    btn.innerText=label;
-    btn.onclick=()=>pickAnswer(i);
-    opts.appendChild(btn);
-  });
-}
+    // PSS-10 based questions. reversed=true means higher answer = LOWER stress
+    const questions = [
+      { cat: '💆 Stress', q: 'Been upset because of something that happened unexpectedly', reversed: false },
+      { cat: '💆 Control', q: 'Felt that you were unable to control the important things in your life', reversed: false },
+      { cat: '💆 Overwhelm', q: 'Felt nervous and stressed', reversed: false },
+      { cat: '💪 Coping', q: 'Felt confident about your ability to handle your personal problems', reversed: true },
+      { cat: '💪 Coping', q: 'Felt that things were going your way', reversed: true },
+      { cat: '💆 Overwhelm', q: 'Found that you could not cope with all the things that you had to do', reversed: false },
+      { cat: '💪 Coping', q: 'Been able to control irritations in your life', reversed: true },
+      { cat: '💆 Control', q: 'Felt that you were on top of things', reversed: true },
+      { cat: '💆 Stress', q: 'Been angered because of things that were outside of your control', reversed: false },
+      { cat: '💆 Overwhelm', q: 'Felt difficulties were piling up so high that you could not overcome them', reversed: false },
+    ];
 
-function pickAnswer(val){
-  answers[currentIdx]=val;
-  currentIdx++;
-  if(currentIdx<questions.length)renderQ();
-  else{calculateStress();showScreen('lead-screen');}
-}
+    const freqLabels = ['Never', 'Almost\nNever', 'Sometimes', 'Fairly\nOften', 'Very\nOften'];
 
-function calculateStress(){
-  let total=0;
-  questions.forEach((q,i)=>{
-    const raw=answers[i]??0;
-    total+=q.reversed?(4-raw):raw;
-  });
-  finalScore=total; // 0-40
-  const pct=Math.round((total/40)*100);
-  if(total<=13){finalLevel='Low Stress';}
-  else if(total<=26){finalLevel='Moderate Stress';}
-  else{finalLevel='High Stress';}
+    let currentIdx = 0;
+    let answers = [];
+    let finalScore = 0;
+    let finalLevel = '';
 
-  document.getElementById('stress-preview').innerText=pct+'%';
-  document.getElementById('stress-preview').style.color=total<=13?'#63f5bc':total<=26?'#f59e63':'#f563a0';
-  document.getElementById('stress-level-label').innerText=finalLevel+' detected';
-}
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = 'none' });
+      const t = document.getElementById(id); t.style.display = 'block'; void t.offsetWidth; t.classList.add('active');
+    }
+    function startTest() { showScreen('quiz-screen'); renderQ(); }
+    function goBack() { if (currentIdx > 0) { currentIdx--; renderQ(); } }
 
-function renderResult(){
-  const pct=Math.round((finalScore/40)*100);
-  const isHigh=finalScore>26, isMid=finalScore>13;
-  const color=isHigh?'#f563a0':isMid?'#f59e63':'#63f5bc';
+    function renderQ() {
+      const q = questions[currentIdx];
+      document.getElementById('q-number').innerText = `Question ${currentIdx + 1} / ${questions.length}`;
+      document.getElementById('progress-bar').style.width = ((currentIdx + 1) / questions.length * 100) + '%';
+      document.getElementById('q-cat').innerText = q.cat;
+      document.getElementById('q-text').innerText = q.q + '?';
+      const backBtn = document.getElementById('back-btn');
+      if (currentIdx === 0) backBtn.classList.add('invisible'); else backBtn.classList.remove('invisible');
+      const opts = document.getElementById('freq-options');
+      opts.innerHTML = '';
+      freqLabels.forEach((label, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'freq-btn' + (answers[currentIdx] === i ? ' selected' : '');
+        btn.innerText = label;
+        btn.onclick = () => pickAnswer(i);
+        opts.appendChild(btn);
+      });
+    }
 
-  // Dial
-  const circ=339;const track=circ*0.75;
-  const offset=track-(track*(pct/100));
-  const dialFill=document.getElementById('dial-fill');
-  dialFill.style.stroke=color;
-  dialFill.style.strokeDasharray=`${track} ${circ}`;
-  dialFill.style.strokeDashoffset=track;
+    function pickAnswer(val) {
+      answers[currentIdx] = val;
+      currentIdx++;
+      if (currentIdx < questions.length) renderQ();
+      else { calculateStress(); showScreen('lead-screen'); }
+    }
 
-  // Count up
-  let c=0;const dialPct=document.getElementById('dial-pct');
-  const step=Math.ceil(pct/60);
-  const interval=setInterval(()=>{
-    c=Math.min(c+step,pct);
-    dialPct.innerText=c+'%';
-    if(c>=pct)clearInterval(interval);
-  },25);
-  setTimeout(()=>{dialFill.style.strokeDashoffset=offset;},200);
+    function calculateStress() {
+      let total = 0;
+      questions.forEach((q, i) => {
+        const raw = answers[i] ?? 0;
+        total += q.reversed ? (4 - raw) : raw;
+      });
+      finalScore = total; // 0-40
+      const pct = Math.round((total / 40) * 100);
+      if (total <= 13) { finalLevel = 'Low Stress'; }
+      else if (total <= 26) { finalLevel = 'Moderate Stress'; }
+      else { finalLevel = 'High Stress'; }
 
-  // Risk badge
-  const badge=document.getElementById('risk-badge');
-  badge.innerText=finalLevel;
-  badge.style.background=isHigh?'rgba(245,99,160,.15)':isMid?'rgba(245,159,99,.15)':'rgba(99,245,188,.15)';
-  badge.style.color=color;
-  badge.style.border=`1px solid ${color}40`;
+      document.getElementById('stress-preview').innerText = pct + '%';
+      document.getElementById('stress-preview').style.color = total <= 13 ? '#63f5bc' : total <= 26 ? '#f59e63' : '#f563a0';
+      document.getElementById('stress-level-label').innerText = finalLevel + ' detected';
+    }
 
-  // Dimension bars
-  const stressDim=answers.filter((_,i)=>!questions[i].reversed).reduce((a,b)=>a+(b??0),0);
-  const copingDim=answers.filter((_,i)=>questions[i].reversed).reduce((a,b)=>a+(4-(b??0)),0);
-  const stressPct=Math.round((stressDim/(7*4))*100);
-  const copingPct=Math.round((copingDim/(3*4))*100);
+    function renderResult() {
+      const pct = Math.round((finalScore / 40) * 100);
+      const isHigh = finalScore > 26, isMid = finalScore > 13;
+      const color = isHigh ? '#f563a0' : isMid ? '#f59e63' : '#63f5bc';
 
-  document.getElementById('dim-bars').innerHTML=`
+      // Dial
+      const circ = 339; const track = circ * 0.75;
+      const offset = track - (track * (pct / 100));
+      const dialFill = document.getElementById('dial-fill');
+      dialFill.style.stroke = color;
+      dialFill.style.strokeDasharray = `${track} ${circ}`;
+      dialFill.style.strokeDashoffset = track;
+
+      // Count up
+      let c = 0; const dialPct = document.getElementById('dial-pct');
+      const step = Math.ceil(pct / 60);
+      const interval = setInterval(() => {
+        c = Math.min(c + step, pct);
+        dialPct.innerText = c + '%';
+        if (c >= pct) clearInterval(interval);
+      }, 25);
+      setTimeout(() => { dialFill.style.strokeDashoffset = offset; }, 200);
+
+      // Risk badge
+      const badge = document.getElementById('risk-badge');
+      badge.innerText = finalLevel;
+      badge.style.background = isHigh ? 'rgba(245,99,160,.15)' : isMid ? 'rgba(245,159,99,.15)' : 'rgba(99,245,188,.15)';
+      badge.style.color = color;
+      badge.style.border = `1px solid ${color}40`;
+
+      // Dimension bars
+      const stressDim = answers.filter((_, i) => !questions[i].reversed).reduce((a, b) => a + (b ?? 0), 0);
+      const copingDim = answers.filter((_, i) => questions[i].reversed).reduce((a, b) => a + (4 - (b ?? 0)), 0);
+      const stressPct = Math.round((stressDim / (7 * 4)) * 100);
+      const copingPct = Math.round((copingDim / (3 * 4)) * 100);
+
+      document.getElementById('dim-bars').innerHTML = `
     <div class="dim-bar-card">
       <div class="dim-bar-label">Stress Load</div>
-      <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${isHigh?'#f563a0':'#f59e63'}" data-w="${stressPct}%"></div></div>
+      <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${isHigh ? '#f563a0' : '#f59e63'}" data-w="${stressPct}%"></div></div>
       <div class="dim-bar-val">${stressPct}%</div>
     </div>
     <div class="dim-bar-card">
@@ -309,42 +888,43 @@ function renderResult(){
       <div class="dim-bar-val">${copingPct}%</div>
     </div>
   `;
-  setTimeout(()=>{document.querySelectorAll('.dim-bar-fill[data-w]').forEach(b=>b.style.width=b.dataset.w);},300);
+      setTimeout(() => { document.querySelectorAll('.dim-bar-fill[data-w]').forEach(b => b.style.width = b.dataset.w); }, 300);
 
-  // Overview
-  const overviews={
-    'Low Stress':'<h3>You\'re doing well 💚</h3><p>Your stress levels are within a healthy range. You appear to have good coping mechanisms and feel generally in control of your life. Keep maintaining your current routines and habits — they\'re clearly working.</p>',
-    'Moderate Stress':'<h3>Manageable, but worth watching ⚠️</h3><p>Your stress is at a moderate level — common in busy professional and personal lives. You\'re coping, but without attention, this can escalate to burnout. Now is a good time to build in more recovery habits.</p>',
-    'High Stress':'<h3>Action recommended 🔴</h3><p>Your stress levels are elevated and may be affecting your wellbeing, productivity, and relationships. This pattern, if sustained, significantly increases burnout risk. Prioritizing recovery is essential.</p>',
-  };
-  document.getElementById('result-overview').innerHTML=overviews[finalLevel];
+      // Overview
+      const overviews = {
+        'Low Stress': '<h3>You\'re doing well 💚</h3><p>Your stress levels are within a healthy range. You appear to have good coping mechanisms and feel generally in control of your life. Keep maintaining your current routines and habits — they\'re clearly working.</p>',
+        'Moderate Stress': '<h3>Manageable, but worth watching ⚠️</h3><p>Your stress is at a moderate level — common in busy professional and personal lives. You\'re coping, but without attention, this can escalate to burnout. Now is a good time to build in more recovery habits.</p>',
+        'High Stress': '<h3>Action recommended 🔴</h3><p>Your stress levels are elevated and may be affecting your wellbeing, productivity, and relationships. This pattern, if sustained, significantly increases burnout risk. Prioritizing recovery is essential.</p>',
+      };
+      document.getElementById('result-overview').innerHTML = overviews[finalLevel];
 
-  const allTips=[
-    'Schedule 10-minute daily decompression blocks — no screens, no tasks',
-    'Identify your top 3 stressors and address one per week systematically',
-    'Practice box breathing (4-4-4-4) during high-pressure moments',
-    'Set firm boundaries around work hours, especially in the evenings',
-    'Add 20 minutes of moderate exercise daily — it directly lowers cortisol',
-    'Connect with someone you trust weekly — social support is a stress buffer',
-    'Delegate or eliminate one low-value task from your week',
-    'Improve sleep hygiene: consistent schedule, dark room, no phone 30 min before bed',
-  ];
-  const tipCount=isHigh?6:isMid?4:3;
-  document.getElementById('tips-list').innerHTML=allTips.slice(0,tipCount).map(t=>`<li>${t}</li>`).join('');
-}
+      const allTips = [
+        'Schedule 10-minute daily decompression blocks — no screens, no tasks',
+        'Identify your top 3 stressors and address one per week systematically',
+        'Practice box breathing (4-4-4-4) during high-pressure moments',
+        'Set firm boundaries around work hours, especially in the evenings',
+        'Add 20 minutes of moderate exercise daily — it directly lowers cortisol',
+        'Connect with someone you trust weekly — social support is a stress buffer',
+        'Delegate or eliminate one low-value task from your week',
+        'Improve sleep hygiene: consistent schedule, dark room, no phone 30 min before bed',
+      ];
+      const tipCount = isHigh ? 6 : isMid ? 4 : 3;
+      document.getElementById('tips-list').innerHTML = allTips.slice(0, tipCount).map(t => `<li>${t}</li>`).join('');
+    }
 
-document.getElementById('leadForm').onsubmit=async(e)=>{
-  e.preventDefault();
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true;btn.innerText='Processing...';
-  const name=document.getElementById('userName').value;
-  const email=document.getElementById('userEmail').value;
-  const pct=Math.round((finalScore/40)*100);
-  try{await sb.from('career_tests').insert([{name,email,iq_score:pct,career_path:finalLevel,test_type:'stress'}]);}catch(e){}
-  try{await emailjs.send("service_qq96gby","template_f3jm56x",{name,email,iq_score:pct+'% stress',career_path:finalLevel});}catch(e){}
-  renderResult();
-  showScreen('result-screen');
-};
-</script>
+    document.getElementById('leadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.innerText = 'Processing...';
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('userEmail').value;
+      const pct = Math.round((finalScore / 40) * 100);
+      try { await sb.from('career_tests').insert([{ name, email, iq_score: pct, career_path: finalLevel, test_type: 'stress' }]); } catch (e) { }
+      try { await emailjs.send("service_qq96gby", "template_f3jm56x", { name, email, iq_score: pct + '% stress', career_path: finalLevel }); } catch (e) { }
+      renderResult();
+      showScreen('result-screen');
+    };
+  </script>
 </body>
+
 </html>
