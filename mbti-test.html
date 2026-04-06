@@ -967,12 +967,12 @@
       const p = mbtiProfiles[mbtiResult] || {};
       try {
         await sb.from('career_tests').insert([{
-          name: document.getElementById('userName').value,
-          email: document.getElementById('userEmail').value,
-          mbti_code: mbtiResult,       // Saves "INTJ"
-          career_path: p.name,         // Saves "The Architect"
-          test_type: 'mbti',
-          iq_score: 0                  // Placeholder for the number column
+          name: name,
+          email: email,
+          mbti_code: mbtiResult,  // Make sure this matches your new column
+          iq_score: 0,            // Send a number so it's not NULL
+          career_path: p.name,
+          test_type: 'mbti'
         }]);
       } catch (err) { }
       try {
