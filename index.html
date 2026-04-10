@@ -256,9 +256,36 @@
       font-size: 16px;
       color: var(--muted);
       max-width: 500px;
-      margin: 0 auto 44px;
+      margin: 0 auto 32px;
       line-height: 1.75;
       font-weight: 300
+    }
+
+    .hero-ctas {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .btn-lucky {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-lucky:hover {
+      border-color: var(--accent2);
+      background: rgba(167, 139, 250, 0.05);
+      transform: translateY(-2px);
     }
 
     .hero-stats {
@@ -335,6 +362,10 @@
 
       .hero-stats {
         gap: 32px
+      }
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
       }
     }
 
@@ -750,6 +781,7 @@
       <span class="logo-text">WALCURE</span>
     </a>
     <div class="nav-right">
+      <a class="nav-link" href="spinner.html">Spinner 🎰</a>
       <a class="nav-link" href="results.html">My Results</a>
       <a class="nav-link" href="#">About</a>
       <a class="nav-cta" href="results.html">Check Results →</a>
@@ -767,6 +799,12 @@
       </h1>
       <p class="hero-sub">Scientifically-calibrated assessments that map your cognitive strengths, personality, and
         career potential in under 10 minutes.</p>
+      
+      <div class="hero-ctas">
+        <a href="#assessments" class="nav-cta" style="padding: 16px 32px; font-size: 15px;">Browse Assessments</a>
+        <a href="spinner.html" class="btn-lucky">Can't decide? 🎰</a>
+      </div>
+
       <div class="hero-stats">
         <div>
           <div class="stat-num">4<em>+</em></div>
@@ -785,7 +823,7 @@
   </section>
 
   <!-- TEST CARDS -->
-  <section class="section">
+  <section class="section" id="assessments">
     <div class="section-head">
       <div class="section-label">Choose Your Assessment</div>
       <div class="section-title">What do you want to <span>discover?</span></div>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="logo-v1.png">
+  <title>Walcure | Decision Spinner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131e;
+      --surface2: #1c1c2e;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #63f5bc;
+      --accent2: #a78bfa;
+      --accent3: #f59e63;
+      --accent4: #f563a0;
+      --text: #eeeef5;
+      --muted: #6b6b85;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND */
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(99, 245, 188, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 245, 188, 0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; animation: orbf 10s ease-in-out infinite; }
+    .o1 { width: 500px; height: 500px; background: rgba(99, 245, 188, 0.07); top: -100px; right: -100px; }
+    .o2 { width: 400px; height: 400px; background: rgba(167, 139, 250, 0.05); bottom: -100px; left: -100px; animation-delay: -5s; }
+    @keyframes orbf { 0%, 100% { transform: translate(0,0) scale(1) } 50% { transform: translate(20px,-25px) scale(1.04) } }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100; height: 72px; padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 11px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #000;
+    }
+
+    /* MAIN */
+    .container {
+      position: relative; z-index: 1; max-width: 1200px; margin: 0 auto;
+      padding: 40px 24px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .header-area { margin-bottom: 30px; }
+    .header-area h1 { font-family: 'DM Sans', sans-serif; font-size: 42px; font-weight: 800; margin-bottom: 8px; }
+    .header-area p { color: var(--muted); font-size: 16px; }
+
+    /* INPUT */
+    .input-box {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 24px; border-radius: 20px; margin-bottom: 40px;
+      width: 100%; max-width: 540px;
+    }
+    .input-box label {
+      display: block; font-size: 11px; color: var(--accent); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; text-align: left; margin-bottom: 10px;
+    }
+    .input-box input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); padding: 16px; border-radius: 12px;
+      font-family: inherit; font-size: 15px; outline: none; margin-bottom: 16px;
+    }
+    .input-box input:focus { border-color: var(--accent); }
+    .update-btn {
+      width: 100%; padding: 12px; background: var(--surface2);
+      border: 1px solid var(--border); color: var(--accent);
+      border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13px;
+      transition: all 0.2s;
+    }
+    .update-btn:hover { background: var(--border); }
+
+    /* WHEEL */
+    .wheel-wrapper {
+      position: relative; width: 380px; height: 380px;
+    }
+    .wheel-pointer {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid var(--text);
+      z-index: 10;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+    canvas#wheelCanvas {
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      display: block;
+    }
+
+    /* SPIN BUTTON */
+    .spin-btn {
+      margin-top: 40px; padding: 20px 60px;
+      background: var(--accent); color: #000;
+      border: none; border-radius: 16px; font-size: 16px; font-weight: 800;
+      cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 10px 40px rgba(99, 245, 188, 0.3);
+    }
+    .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 50px rgba(99, 245, 188, 0.5); }
+    .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* MODAL */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px); z-index: 140; display: none;
+    }
+    .result-card {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: var(--surface); border: 1px solid var(--accent);
+      padding: 48px; border-radius: 32px; z-index: 150;
+      display: none; opacity: 0; transition: all 0.4s;
+      text-align: center; min-width: 320px;
+    }
+    .result-card.active {
+      display: block; opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .res-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; font-weight: 600; }
+    .res-val { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: var(--accent); margin-bottom: 32px; }
+    .close-btn {
+      padding: 16px 36px; background: var(--surface2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 14px;
+      cursor: pointer; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-mark">W</div>
+      <span style="font-weight:800; letter-spacing:0.08em;">WALCURE</span>
+    </a>
+  </nav>
+
+  <main class="container">
+    <div class="header-area">
+      <h1>Decision Spinner</h1>
+      <p>Custom decision maker for your daily tasks.</p>
+    </div>
+
+    <div class="input-box">
+      <label>Enter Choices (Separate with Commas)</label>
+      <input type="text" id="choicesInput" value="Drink, Gym, Hike, Karaoke, Sleep, Code" placeholder="Choice 1, Choice 2, ...">
+      <button class="update-btn" onclick="updateWheel()">SYNC WHEEL DATA</button>
+    </div>
+
+    <div class="wheel-wrapper">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="380" height="380"></canvas>
+    </div>
+
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">SPIN THE WHEEL</button>
+  </main>
+
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
+  <div class="result-card" id="resultCard">
+    <div class="res-label">Selected Choice</div>
+    <div class="res-val" id="resVal">—</div>
+    <button class="close-btn" onclick="closeModal()">Try Again</button>
+  </div>
+
+  <script>
+    const canvas  = document.getElementById('wheelCanvas');
+    const ctx     = canvas.getContext('2d');
+
+    const SLICE_COLORS = ['#63f5bc', '#a78bfa', '#f59e63', '#f563a0', '#4299e1', '#e8e8f0'];
+    const TEXT_COLORS  = ['#000',    '#fff',    '#000',    '#fff',    '#fff',    '#000'   ];
+
+    let choices      = [];
+    let currentAngle = 0; // radians, cumulative
+    let spinning     = false;
+
+    /* ── Draw ── */
+    function drawWheel(angle) {
+      const cx = canvas.width  / 2;
+      const cy = canvas.height / 2;
+      const r  = cx - 4;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const n   = choices.length;
+      if (n < 2) return;
+      const arc = (2 * Math.PI) / n;
+
+      for (let i = 0; i < n; i++) {
+        const start = angle + i * arc - Math.PI / 2;
+        const end   = start + arc;
+
+        // Slice fill
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = SLICE_COLORS[i % SLICE_COLORS.length];
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Label — always horizontal-readable
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + arc / 2);   // point toward slice midpoint
+        ctx.textAlign    = 'right';
+        ctx.textBaseline = 'middle';
+        const fontSize = Math.max(10, Math.min(16, 210 / n));
+        ctx.font      = `800 ${fontSize}px 'DM Sans', sans-serif`;
+        ctx.fillStyle = TEXT_COLORS[i % TEXT_COLORS.length];
+        ctx.fillText(choices[i].toUpperCase(), r - 14, 0);
+        ctx.restore();
+      }
+
+      // Centre hub
+      ctx.beginPath();
+      ctx.arc(cx, cy, 20, 0, 2 * Math.PI);
+      ctx.fillStyle   = '#0a0a0f';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth   = 2;
+      ctx.stroke();
+    }
+
+    /* ── Update from input ── */
+    function updateWheel() {
+      const val = document.getElementById('choicesInput').value
+        .split(',').map(s => s.trim()).filter(Boolean);
+      if (val.length < 2) { alert('Enter at least 2 choices!'); return; }
+      choices = val;
+      drawWheel(currentAngle);
+    }
+
+    /* ── Spin animation ── */
+    let animStart = null, animFrom = 0, animTo = 0;
+    const DURATION = 5000;
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+
+    function animate(ts) {
+      if (!animStart) animStart = ts;
+      const t     = Math.min((ts - animStart) / DURATION, 1);
+      const angle = animFrom + (animTo - animFrom) * easeOut(t);
+      drawWheel(angle);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        currentAngle = animTo;
+        drawWheel(currentAngle);
+
+        // Which slice is under the pointer (top = -PI/2)?
+        const n          = choices.length;
+        const arc        = (2 * Math.PI) / n;
+        const normalized = ((currentAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+        const idx        = Math.floor(((2 * Math.PI - normalized) % (2 * Math.PI)) / arc) % n;
+
+        showResult(choices[idx]);
+        document.getElementById('spinBtn').disabled = false;
+        spinning = false;
+      }
+    }
+
+    function spinWheel() {
+      if (spinning || choices.length < 2) return;
+      spinning = true;
+      document.getElementById('spinBtn').disabled = true;
+
+      animFrom  = currentAngle;
+      animTo    = currentAngle + 10 * 2 * Math.PI + Math.random() * 2 * Math.PI;
+      animStart = null;
+      requestAnimationFrame(animate);
+    }
+
+    /* ── Modal ── */
+    function showResult(value) {
+      document.getElementById('resVal').textContent = value;
+      document.getElementById('overlay').style.display    = 'block';
+      document.getElementById('resultCard').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('resultCard').classList.remove('active');
+    }
+
+    // Init
+    updateWheel();
+  </script>
+</body>
+</html>
