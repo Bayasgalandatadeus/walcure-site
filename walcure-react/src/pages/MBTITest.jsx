@@ -160,6 +160,8 @@ export default function MBTITest() {
             <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
               {[1, 2, 3, 4, 5].map(v => (
                 <button key={v} onClick={() => pickAnswer(v)}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#a78bfa'; e.currentTarget.style.background = 'rgba(167,139,250,0.1)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = answers[currentIdx] === v ? '#a78bfa' : 'var(--border)'; e.currentTarget.style.background = answers[currentIdx] === v ? 'rgba(167,139,250,0.12)' : 'var(--surface)' }}
                   style={{ flex: 1, maxWidth: 80, aspectRatio: '1', borderRadius: 14, border: `1.5px solid ${answers[currentIdx] === v ? '#a78bfa' : 'var(--border)'}`, background: answers[currentIdx] === v ? 'rgba(167,139,250,0.12)' : 'var(--surface)', cursor: 'pointer', transition: 'all .2s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, color: answers[currentIdx] === v ? '#a78bfa' : 'var(--muted)' }}>
                   <div style={{ borderRadius: '50%', background: 'currentColor', width: [8,12,16,12,8][v-1], height: [8,12,16,12,8][v-1], opacity: v === 3 ? 0.4 : 1 }} />
                   <span style={{ fontSize: 11, fontWeight: 600 }}>{v === 1 ? 'A' : v === 5 ? 'B' : v}</span>

@@ -261,6 +261,8 @@ export default function IQTest() {
                 const state = optionState(i)
                 return (
                   <button key={i} onClick={() => handleChoice(i)} disabled={answered}
+                    onMouseEnter={e => { if (!answered) { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'rgba(99,245,188,0.07)' } }}
+                    onMouseLeave={e => { if (!answered) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)' } }}
                     style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 16, padding: '20px 24px', background: state === 'correct' ? 'rgba(99,245,188,0.12)' : state === 'wrong' ? 'rgba(248,113,113,0.08)' : state === 'selected' ? 'rgba(99,245,188,0.08)' : 'var(--surface)', border: `1.5px solid ${state === 'correct' ? 'var(--accent)' : state === 'wrong' ? '#f87171' : state === 'selected' ? 'var(--accent)' : 'var(--border)'}`, borderRadius: 16, cursor: answered ? 'default' : 'pointer', textAlign: 'left', transition: 'all 0.2s', fontFamily: "'DM Sans',sans-serif" }}>
                     <div style={{ width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 14, fontWeight: 700, background: state === 'correct' ? 'var(--accent)' : state === 'wrong' ? '#f87171' : 'var(--surface2)', color: state === 'correct' ? '#000' : state === 'wrong' ? '#fff' : 'var(--muted)', transition: 'all 0.2s' }}>{LETTERS[i]}</div>
                     <span style={{ fontSize: 15, fontWeight: 500, color: state === 'selected' ? 'var(--accent)' : 'var(--text)', lineHeight: 1.4 }}>{opt}</span>

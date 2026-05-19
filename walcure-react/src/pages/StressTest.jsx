@@ -133,6 +133,8 @@ export default function StressTest() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
               {FREQ_LABELS.map((label, i) => (
                 <button key={i} onClick={() => pickAnswer(i)}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#f563a0'; e.currentTarget.style.background = 'rgba(245,99,160,.2)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = answers[currentIdx] === i ? '#f563a0' : 'var(--border)'; e.currentTarget.style.background = answers[currentIdx] === i ? 'rgba(245,99,160,.1)' : 'var(--surface)' }}
                   style={{ padding: '14px 6px', borderRadius: 12, border: `1.5px solid ${answers[currentIdx] === i ? '#f563a0' : 'var(--border)'}`, background: answers[currentIdx] === i ? 'rgba(245,99,160,.1)' : 'var(--surface)', cursor: 'pointer', transition: 'all .2s', fontSize: 11, fontWeight: 500, color: answers[currentIdx] === i ? '#f563a0' : 'var(--muted)', textAlign: 'center', lineHeight: 1.4, fontFamily: "'DM Sans',sans-serif" }}>{label}</button>
               ))}
             </div>

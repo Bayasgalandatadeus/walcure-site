@@ -156,6 +156,8 @@ export default function CareerTest() {
             <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between' }}>
               {[1,2,3,4,5].map(v => (
                 <button key={v} onClick={() => pickAnswer(v)}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#f59e63'; e.currentTarget.style.background = 'rgba(245,159,99,.15)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = answers[currentIdx] === v ? '#f59e63' : 'var(--border)'; e.currentTarget.style.background = answers[currentIdx] === v ? 'rgba(245,159,99,.1)' : 'var(--surface)' }}
                   style={{ flex: 1, padding: '16px 6px', borderRadius: 12, border: `1.5px solid ${answers[currentIdx] === v ? '#f59e63' : 'var(--border)'}`, background: answers[currentIdx] === v ? 'rgba(245,159,99,.1)' : 'var(--surface)', cursor: 'pointer', transition: 'all .2s', fontSize: 12, fontWeight: 700, color: answers[currentIdx] === v ? '#f59e63' : 'var(--muted)', fontFamily: "'DM Sans',sans-serif" }}>{v}</button>
               ))}
             </div>
