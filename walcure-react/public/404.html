@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    // GitHub Pages SPA redirect: preserve the path in sessionStorage, then redirect to /
+    var path = window.location.pathname;
+    sessionStorage.setItem('redirect', path);
+    window.location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>
