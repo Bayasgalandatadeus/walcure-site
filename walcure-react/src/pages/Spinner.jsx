@@ -132,7 +132,7 @@ export default function Spinner() {
         <>
           <div onClick={() => setResult(null)}
             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', zIndex: 140 }} />
-          <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: 'var(--surface)', border: '1px solid var(--accent)', padding: 48, borderRadius: 32, zIndex: 150, textAlign: 'center', minWidth: 320, animation: 'fadeUp 0.3s ease' }}>
+          <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: 'var(--surface)', border: '1px solid var(--accent)', padding: 48, borderRadius: 32, zIndex: 150, textAlign: 'center', minWidth: 320, animation: 'fadeUpModal 0.35s ease both' }}>
             <div style={{ fontSize: 13, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 3, marginBottom: 12, fontWeight: 600 }}>Selected Choice</div>
             <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 48, fontWeight: 800, color: 'var(--accent)', marginBottom: 28 }}>{result}</div>
             <button onClick={() => setResult(null)}
