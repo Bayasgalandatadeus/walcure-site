@@ -193,6 +193,11 @@ export default function IQTest() {
     <>
       <Background />
       <Nav variant="test" />
+      <style>{`
+        @media (max-width: 640px) {
+          .intro-features { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
 
       <main className="quiz-main">
         {/* ── INTRO ── */}
@@ -218,7 +223,7 @@ export default function IQTest() {
               Begin Assessment
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginTop: 60 }}>
+            <div className="intro-features" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginTop: 60 }}>
               {[['🧠','Cognitive Mapping','Questions designed by cognitive scientists to reveal your thinking patterns.'],['🎯','Career Match','Your results are matched against 20+ real-world high-growth career profiles.'],['📊','Instant Report','Receive a detailed breakdown with your IQ score and personalized roadmap.']].map(([icon,title,desc]) => (
                 <div key={title} style={{ padding: 24, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16 }}>
                   <div style={{ fontSize: 24, marginBottom: 12 }}>{icon}</div>

@@ -6,6 +6,7 @@ import CareerTest from './pages/CareerTest'
 import StressTest from './pages/StressTest'
 import Results from './pages/Results'
 import Spinner from './pages/Spinner'
+import DataCrimeScene from './pages/DataCrimeScene'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/stress-test" element={<StressTest />} />
         <Route path="/results" element={<Results />} />
         <Route path="/spinner" element={<Spinner />} />
+        <Route path="/data-crime-scene" element={<DataCrimeScene />} />
       </Routes>
     </BrowserRouter>
   )

@@ -65,6 +65,20 @@ const tests = [
       'Workplace wellbeing score',
     ],
   },
+  {
+    theme: 'teal',
+    href: '/data-crime-scene',
+    icon: '🕵️',
+    tag: 'Investigation · 3 Cases',
+    title: 'Data Crime Scene',
+    desc: 'Play a data-quality detective game: comb through customer records, cross-check systems, and flag real issues without accusing clean data.',
+    features: [
+      'Timed investigation per case',
+      'Accuracy, completeness & consistency checks',
+      'Real consequences for missed & false flags',
+      '3 attempts with fresh case files',
+    ],
+  },
 ]
 
 function TestCard({ test, index }) {
@@ -249,6 +263,12 @@ export default function Home() {
         .theme-pink .card-features li::before { background: var(--accent4); }
         .theme-pink .card-cta { background: var(--accent4); color: #fff; }
         .theme-pink .card-cta:hover { box-shadow: 0 12px 40px rgba(245,99,160,.3); }
+
+        .theme-teal .card-icon-wrap { background: rgba(66,153,225,.1); }
+        .theme-teal .card-tag { background: rgba(66,153,225,.1); color: #4299e1; }
+        .theme-teal .card-features li::before { background: #4299e1; }
+        .theme-teal .card-cta { background: #4299e1; color: #fff; }
+        .theme-teal .card-cta:hover { box-shadow: 0 12px 40px rgba(66,153,225,.3); }
 
         .feature-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 80px; }
         .feature-item { background: var(--surface); padding: 32px 28px; display: flex; align-items: flex-start; gap: 16px; }
